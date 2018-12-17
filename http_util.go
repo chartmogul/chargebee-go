@@ -68,6 +68,9 @@ func newRequest(env Environment, method string, path string, body io.Reader, hea
 	if !strings.HasPrefix(path, "/") {
 		path = "/" + path
 	}
+	if env.Transport != nil {
+		httpClient.Transport = env.Transport
+	}
 	path = env.apiBaseUrl() + path
 	httpReq, err := http.NewRequest(method, path, body)
 	if err != nil {
