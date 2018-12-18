@@ -12,7 +12,7 @@ type Environment struct {
 	SiteName        string
 	ChargebeeDomain string
 	Protocol        string
-	Transport       http.RoundTripper
+	HTTPClient      *http.Client
 }
 
 var (
