@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"github.com/cenkalti/backoff"
 )
@@ -33,7 +34,7 @@ func Do(req *http.Request, env Environment) (string, error) {
 	// https://godoc.org/github.com/cenkalti/backoff#pkg-constants
 	backoff.Retry(func() error {
 		response, err = client.Do(req)
-		if err != nil {
+		if _, ok := err.(*url.Error); ok {
 			return nil
 		}
 		if response == nil || response.StatusCode == http.StatusTooManyRequests {
