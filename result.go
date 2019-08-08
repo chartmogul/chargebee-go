@@ -15,6 +15,8 @@ import (
 	"github.com/chargebee/chargebee-go/models/estimate"
 	"github.com/chargebee/chargebee-go/models/event"
 	"github.com/chargebee/chargebee-go/models/export"
+	"github.com/chargebee/chargebee-go/models/gift"
+	"github.com/chargebee/chargebee-go/models/hierarchy"
 	"github.com/chargebee/chargebee-go/models/hostedpage"
 	"github.com/chargebee/chargebee-go/models/invoice"
 	"github.com/chargebee/chargebee-go/models/order"
@@ -22,11 +24,13 @@ import (
 	"github.com/chargebee/chargebee-go/models/plan"
 	"github.com/chargebee/chargebee-go/models/portalsession"
 	"github.com/chargebee/chargebee-go/models/promotionalcredit"
+	"github.com/chargebee/chargebee-go/models/quote"
 	"github.com/chargebee/chargebee-go/models/resourcemigration"
 	"github.com/chargebee/chargebee-go/models/sitemigrationdetail"
 	"github.com/chargebee/chargebee-go/models/subscription"
 	"github.com/chargebee/chargebee-go/models/thirdpartypaymentmethod"
 	"github.com/chargebee/chargebee-go/models/timemachine"
+	"github.com/chargebee/chargebee-go/models/token"
 	"github.com/chargebee/chargebee-go/models/transaction"
 	"github.com/chargebee/chargebee-go/models/unbilledcharge"
 	"github.com/chargebee/chargebee-go/models/virtualbankaccount"
@@ -39,7 +43,9 @@ type ResultList struct {
 type Result struct {
 	Subscription            *subscription.Subscription                       `json:"subscription,omitempty"`
 	Customer                *customer.Customer                               `json:"customer,omitempty"`
+	Hierarchy               *hierarchy.Hierarchy                             `json:"hierarchy,omitempty"`
 	Contact                 *contact.Contact                                 `json:"contact,omitempty"`
+	Token                   *token.Token                                     `json:"token,omitempty"`
 	PaymentSource           *paymentsource.PaymentSource                     `json:"payment_source,omitempty"`
 	ThirdPartyPaymentMethod *thirdpartypaymentmethod.ThirdPartyPaymentMethod `json:"third_party_payment_method,omitempty"`
 	VirtualBankAccount      *virtualbankaccount.VirtualBankAccount           `json:"virtual_bank_account,omitempty"`
@@ -49,9 +55,11 @@ type Result struct {
 	CreditNote              *creditnote.CreditNote                           `json:"credit_note,omitempty"`
 	UnbilledCharge          *unbilledcharge.UnbilledCharge                   `json:"unbilled_charge,omitempty"`
 	Order                   *order.Order                                     `json:"order,omitempty"`
+	Gift                    *gift.Gift                                       `json:"gift,omitempty"`
 	Transaction             *transaction.Transaction                         `json:"transaction,omitempty"`
 	HostedPage              *hostedpage.HostedPage                           `json:"hosted_page,omitempty"`
 	Estimate                *estimate.Estimate                               `json:"estimate,omitempty"`
+	Quote                   *quote.Quote                                     `json:"quote,omitempty"`
 	Plan                    *plan.Plan                                       `json:"plan,omitempty"`
 	Addon                   *addon.Addon                                     `json:"addon,omitempty"`
 	Coupon                  *coupon.Coupon                                   `json:"coupon,omitempty"`
@@ -68,5 +76,6 @@ type Result struct {
 	Export                  *export.Export                                   `json:"export,omitempty"`
 	UnbilledCharges         []*unbilledcharge.UnbilledCharge                 `json:"unbilled_charges,omitempty"`
 	CreditNotes             []*creditnote.CreditNote                         `json:"credit_notes,omitempty"`
+	Hierarchies             []*hierarchy.Hierarchy                           `json:"hierarchies,omitempty"`
 	Invoices                []*invoice.Invoice                               `json:"invoices,omitempty"`
 }

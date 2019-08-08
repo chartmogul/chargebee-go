@@ -8,49 +8,58 @@ import (
 )
 
 type Customer struct {
-	Id                     string                        `json:"id"`
-	FirstName              string                        `json:"first_name"`
-	LastName               string                        `json:"last_name"`
-	Email                  string                        `json:"email"`
-	Phone                  string                        `json:"phone"`
-	Company                string                        `json:"company"`
-	VatNumber              string                        `json:"vat_number"`
-	AutoCollection         enum.AutoCollection           `json:"auto_collection"`
-	NetTermDays            int32                         `json:"net_term_days"`
-	AllowDirectDebit       bool                          `json:"allow_direct_debit"`
-	CreatedAt              int64                         `json:"created_at"`
-	CreatedFromIp          string                        `json:"created_from_ip"`
-	Taxability             enum.Taxability               `json:"taxability"`
-	EntityCode             enum.EntityCode               `json:"entity_code"`
-	ExemptNumber           string                        `json:"exempt_number"`
-	ResourceVersion        int64                         `json:"resource_version"`
-	UpdatedAt              int64                         `json:"updated_at"`
-	Locale                 string                        `json:"locale"`
-	ConsolidatedInvoicing  bool                          `json:"consolidated_invoicing"`
-	BillingDate            int32                         `json:"billing_date"`
-	BillingDateMode        enum.BillingDateMode          `json:"billing_date_mode"`
-	BillingDayOfWeek       customerEnum.BillingDayOfWeek `json:"billing_day_of_week"`
-	BillingDayOfWeekMode   enum.BillingDayOfWeekMode     `json:"billing_day_of_week_mode"`
-	CardStatus             customerEnum.CardStatus       `json:"card_status"`
-	FraudFlag              customerEnum.FraudFlag        `json:"fraud_flag"`
-	PrimaryPaymentSourceId string                        `json:"primary_payment_source_id"`
-	BackupPaymentSourceId  string                        `json:"backup_payment_source_id"`
-	BillingAddress         *BillingAddress               `json:"billing_address"`
-	ReferralUrls           []*ReferralUrl                `json:"referral_urls"`
-	Contacts               []*Contact                    `json:"contacts"`
-	PaymentMethod          *PaymentMethod                `json:"payment_method"`
-	InvoiceNotes           string                        `json:"invoice_notes"`
-	PreferredCurrencyCode  string                        `json:"preferred_currency_code"`
-	PromotionalCredits     int32                         `json:"promotional_credits"`
-	UnbilledCharges        int32                         `json:"unbilled_charges"`
-	RefundableCredits      int32                         `json:"refundable_credits"`
-	ExcessPayments         int32                         `json:"excess_payments"`
-	Balances               []*Balance                    `json:"balances"`
-	MetaData               json.RawMessage               `json:"meta_data"`
-	Deleted                bool                          `json:"deleted"`
-	RegisteredForGst       bool                          `json:"registered_for_gst"`
-	CustomField            map[string]interface{}        `json:"custom_field"`
-	Object                 string                        `json:"object"`
+	Id                               string                        `json:"id"`
+	FirstName                        string                        `json:"first_name"`
+	LastName                         string                        `json:"last_name"`
+	Email                            string                        `json:"email"`
+	Phone                            string                        `json:"phone"`
+	Company                          string                        `json:"company"`
+	VatNumber                        string                        `json:"vat_number"`
+	AutoCollection                   enum.AutoCollection           `json:"auto_collection"`
+	NetTermDays                      int32                         `json:"net_term_days"`
+	VatNumberValidatedTime           int64                         `json:"vat_number_validated_time"`
+	VatNumberStatus                  customerEnum.VatNumberStatus  `json:"vat_number_status"`
+	AllowDirectDebit                 bool                          `json:"allow_direct_debit"`
+	IsLocationValid                  bool                          `json:"is_location_valid"`
+	CreatedAt                        int64                         `json:"created_at"`
+	CreatedFromIp                    string                        `json:"created_from_ip"`
+	ExemptionDetails                 json.RawMessage               `json:"exemption_details"`
+	Taxability                       enum.Taxability               `json:"taxability"`
+	EntityCode                       enum.EntityCode               `json:"entity_code"`
+	ExemptNumber                     string                        `json:"exempt_number"`
+	ResourceVersion                  int64                         `json:"resource_version"`
+	UpdatedAt                        int64                         `json:"updated_at"`
+	Locale                           string                        `json:"locale"`
+	ConsolidatedInvoicing            bool                          `json:"consolidated_invoicing"`
+	BillingDate                      int32                         `json:"billing_date"`
+	BillingDateMode                  enum.BillingDateMode          `json:"billing_date_mode"`
+	BillingDayOfWeek                 customerEnum.BillingDayOfWeek `json:"billing_day_of_week"`
+	BillingDayOfWeekMode             enum.BillingDayOfWeekMode     `json:"billing_day_of_week_mode"`
+	PiiCleared                       customerEnum.PiiCleared       `json:"pii_cleared"`
+	CardStatus                       customerEnum.CardStatus       `json:"card_status"`
+	FraudFlag                        customerEnum.FraudFlag        `json:"fraud_flag"`
+	PrimaryPaymentSourceId           string                        `json:"primary_payment_source_id"`
+	BackupPaymentSourceId            string                        `json:"backup_payment_source_id"`
+	BillingAddress                   *BillingAddress               `json:"billing_address"`
+	ReferralUrls                     []*ReferralUrl                `json:"referral_urls"`
+	Contacts                         []*Contact                    `json:"contacts"`
+	PaymentMethod                    *PaymentMethod                `json:"payment_method"`
+	InvoiceNotes                     string                        `json:"invoice_notes"`
+	PreferredCurrencyCode            string                        `json:"preferred_currency_code"`
+	PromotionalCredits               int32                         `json:"promotional_credits"`
+	UnbilledCharges                  int32                         `json:"unbilled_charges"`
+	RefundableCredits                int32                         `json:"refundable_credits"`
+	ExcessPayments                   int32                         `json:"excess_payments"`
+	Balances                         []*Balance                    `json:"balances"`
+	MetaData                         json.RawMessage               `json:"meta_data"`
+	Deleted                          bool                          `json:"deleted"`
+	RegisteredForGst                 bool                          `json:"registered_for_gst"`
+	BusinessCustomerWithoutVatNumber bool                          `json:"business_customer_without_vat_number"`
+	CustomerType                     enum.CustomerType             `json:"customer_type"`
+	Relationship                     *Relationship                 `json:"relationship"`
+	CustomField                      map[string]interface{}        `json:"custom_field"`
+	Consents                         map[string]interface{}        `json:"consents"`
+	Object                           string                        `json:"object"`
 }
 type BillingAddress struct {
 	FirstName        string                `json:"first_name"`
@@ -109,6 +118,12 @@ type Balance struct {
 	BalanceCurrencyCode string `json:"balance_currency_code"`
 	Object              string `json:"object"`
 }
+type Relationship struct {
+	ParentId       string `json:"parent_id"`
+	PaymentOwnerId string `json:"payment_owner_id"`
+	InvoiceOwnerId string `json:"invoice_owner_id"`
+	Object         string `json:"object"`
+}
 type CreateRequestParams struct {
 	Id                    string                      `json:"id,omitempty"`
 	FirstName             string                      `json:"first_name,omitempty"`
@@ -123,13 +138,18 @@ type CreateRequestParams struct {
 	VatNumber             string                      `json:"vat_number,omitempty"`
 	RegisteredForGst      *bool                       `json:"registered_for_gst,omitempty"`
 	Taxability            enum.Taxability             `json:"taxability,omitempty"`
+	ExemptionDetails      []map[string]interface{}    `json:"exemption_details,omitempty"`
+	CustomerType          enum.CustomerType           `json:"customer_type,omitempty"`
 	Locale                string                      `json:"locale,omitempty"`
 	EntityCode            enum.EntityCode             `json:"entity_code,omitempty"`
 	ExemptNumber          string                      `json:"exempt_number,omitempty"`
 	MetaData              map[string]interface{}      `json:"meta_data,omitempty"`
 	ConsolidatedInvoicing *bool                       `json:"consolidated_invoicing,omitempty"`
 	Card                  *CreateCardParams           `json:"card,omitempty"`
+	BankAccount           *CreateBankAccountParams    `json:"bank_account,omitempty"`
+	TokenId               string                      `json:"token_id,omitempty"`
 	PaymentMethod         *CreatePaymentMethodParams  `json:"payment_method,omitempty"`
+	PaymentIntent         *CreatePaymentIntentParams  `json:"payment_intent,omitempty"`
 	BillingAddress        *CreateBillingAddressParams `json:"billing_address,omitempty"`
 	CreatedFromIp         string                      `json:"created_from_ip,omitempty"`
 	InvoiceNotes          string                      `json:"invoice_notes,omitempty"`
@@ -153,6 +173,23 @@ type CreateCardParams struct {
 	BillingCountry   string       `json:"billing_country,omitempty"`
 	IpAddress        string       `json:"ip_address,omitempty"`
 }
+type CreateBankAccountParams struct {
+	GatewayAccountId      string                 `json:"gateway_account_id,omitempty"`
+	Iban                  string                 `json:"iban,omitempty"`
+	FirstName             string                 `json:"first_name,omitempty"`
+	LastName              string                 `json:"last_name,omitempty"`
+	Company               string                 `json:"company,omitempty"`
+	Email                 string                 `json:"email,omitempty"`
+	BankName              string                 `json:"bank_name,omitempty"`
+	AccountNumber         string                 `json:"account_number,omitempty"`
+	RoutingNumber         string                 `json:"routing_number,omitempty"`
+	BankCode              string                 `json:"bank_code,omitempty"`
+	AccountType           enum.AccountType       `json:"account_type,omitempty"`
+	AccountHolderType     enum.AccountHolderType `json:"account_holder_type,omitempty"`
+	EcheckType            enum.EcheckType        `json:"echeck_type,omitempty"`
+	IssuingCountry        string                 `json:"issuing_country,omitempty"`
+	SwedishIdentityNumber string                 `json:"swedish_identity_number,omitempty"`
+}
 type CreatePaymentMethodParams struct {
 	Type             enum.Type    `json:"type,omitempty"`
 	Gateway          enum.Gateway `json:"gateway,omitempty"`
@@ -160,6 +197,11 @@ type CreatePaymentMethodParams struct {
 	ReferenceId      string       `json:"reference_id,omitempty"`
 	TmpToken         string       `json:"tmp_token,omitempty"`
 	IssuingCountry   string       `json:"issuing_country,omitempty"`
+}
+type CreatePaymentIntentParams struct {
+	GatewayAccountId  string `json:"gateway_account_id,omitempty"`
+	GwToken           string `json:"gw_token,omitempty"`
+	GwPaymentMethodId string `json:"gw_payment_method_id,omitempty"`
 }
 type CreateBillingAddressParams struct {
 	FirstName        string                `json:"first_name,omitempty"`
@@ -177,7 +219,6 @@ type CreateBillingAddressParams struct {
 	Country          string                `json:"country,omitempty"`
 	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
 }
-
 type ListRequestParams struct {
 	Limit          *int32                  `json:"limit,omitempty"`
 	Offset         string                  `json:"offset,omitempty"`
@@ -192,29 +233,35 @@ type ListRequestParams struct {
 	Taxability     *filter.EnumFilter      `json:"taxability,omitempty"`
 	CreatedAt      *filter.TimestampFilter `json:"created_at,omitempty"`
 	UpdatedAt      *filter.TimestampFilter `json:"updated_at,omitempty"`
+	Relationship   *ListRelationshipParams `json:"relationship,omitempty"`
 	SortBy         *filter.SortFilter      `json:"sort_by,omitempty"`
 }
-
-type UpdateRequestParams struct {
-	FirstName             string                 `json:"first_name,omitempty"`
-	LastName              string                 `json:"last_name,omitempty"`
-	Email                 string                 `json:"email,omitempty"`
-	PreferredCurrencyCode string                 `json:"preferred_currency_code,omitempty"`
-	Phone                 string                 `json:"phone,omitempty"`
-	Company               string                 `json:"company,omitempty"`
-	AutoCollection        enum.AutoCollection    `json:"auto_collection,omitempty"`
-	AllowDirectDebit      *bool                  `json:"allow_direct_debit,omitempty"`
-	NetTermDays           *int32                 `json:"net_term_days,omitempty"`
-	Taxability            enum.Taxability        `json:"taxability,omitempty"`
-	Locale                string                 `json:"locale,omitempty"`
-	EntityCode            enum.EntityCode        `json:"entity_code,omitempty"`
-	ExemptNumber          string                 `json:"exempt_number,omitempty"`
-	InvoiceNotes          string                 `json:"invoice_notes,omitempty"`
-	MetaData              map[string]interface{} `json:"meta_data,omitempty"`
-	FraudFlag             customerEnum.FraudFlag `json:"fraud_flag,omitempty"`
-	ConsolidatedInvoicing *bool                  `json:"consolidated_invoicing,omitempty"`
+type ListRelationshipParams struct {
+	ParentId       *filter.StringFilter `json:"parent_id,omitempty"`
+	PaymentOwnerId *filter.StringFilter `json:"payment_owner_id,omitempty"`
+	InvoiceOwnerId *filter.StringFilter `json:"invoice_owner_id,omitempty"`
 }
-
+type UpdateRequestParams struct {
+	FirstName             string                   `json:"first_name,omitempty"`
+	LastName              string                   `json:"last_name,omitempty"`
+	Email                 string                   `json:"email,omitempty"`
+	PreferredCurrencyCode string                   `json:"preferred_currency_code,omitempty"`
+	Phone                 string                   `json:"phone,omitempty"`
+	Company               string                   `json:"company,omitempty"`
+	AutoCollection        enum.AutoCollection      `json:"auto_collection,omitempty"`
+	AllowDirectDebit      *bool                    `json:"allow_direct_debit,omitempty"`
+	NetTermDays           *int32                   `json:"net_term_days,omitempty"`
+	Taxability            enum.Taxability          `json:"taxability,omitempty"`
+	ExemptionDetails      []map[string]interface{} `json:"exemption_details,omitempty"`
+	CustomerType          enum.CustomerType        `json:"customer_type,omitempty"`
+	Locale                string                   `json:"locale,omitempty"`
+	EntityCode            enum.EntityCode          `json:"entity_code,omitempty"`
+	ExemptNumber          string                   `json:"exempt_number,omitempty"`
+	InvoiceNotes          string                   `json:"invoice_notes,omitempty"`
+	MetaData              map[string]interface{}   `json:"meta_data,omitempty"`
+	FraudFlag             customerEnum.FraudFlag   `json:"fraud_flag,omitempty"`
+	ConsolidatedInvoicing *bool                    `json:"consolidated_invoicing,omitempty"`
+}
 type UpdatePaymentMethodRequestParams struct {
 	PaymentMethod *UpdatePaymentMethodPaymentMethodParams `json:"payment_method,omitempty"`
 }
@@ -226,7 +273,6 @@ type UpdatePaymentMethodPaymentMethodParams struct {
 	TmpToken         string       `json:"tmp_token,omitempty"`
 	IssuingCountry   string       `json:"issuing_country,omitempty"`
 }
-
 type UpdateBillingInfoRequestParams struct {
 	BillingAddress   *UpdateBillingInfoBillingAddressParams `json:"billing_address,omitempty"`
 	VatNumber        string                                 `json:"vat_number,omitempty"`
@@ -248,17 +294,14 @@ type UpdateBillingInfoBillingAddressParams struct {
 	Country          string                `json:"country,omitempty"`
 	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
 }
-
 type ContactsForCustomerRequestParams struct {
 	Limit  *int32 `json:"limit,omitempty"`
 	Offset string `json:"offset,omitempty"`
 }
-
 type AssignPaymentRoleRequestParams struct {
 	PaymentSourceId string    `json:"payment_source_id"`
 	Role            enum.Role `json:"role"`
 }
-
 type AddContactRequestParams struct {
 	Contact *AddContactContactParams `json:"contact,omitempty"`
 }
@@ -273,7 +316,6 @@ type AddContactContactParams struct {
 	SendBillingEmail *bool  `json:"send_billing_email,omitempty"`
 	SendAccountEmail *bool  `json:"send_account_email,omitempty"`
 }
-
 type UpdateContactRequestParams struct {
 	Contact *UpdateContactContactParams `json:"contact,omitempty"`
 }
@@ -288,14 +330,12 @@ type UpdateContactContactParams struct {
 	SendBillingEmail *bool  `json:"send_billing_email,omitempty"`
 	SendAccountEmail *bool  `json:"send_account_email,omitempty"`
 }
-
 type DeleteContactRequestParams struct {
 	Contact *DeleteContactContactParams `json:"contact,omitempty"`
 }
 type DeleteContactContactParams struct {
 	Id string `json:"id"`
 }
-
 type AddPromotionalCreditsRequestParams struct {
 	Amount       *int32          `json:"amount"`
 	CurrencyCode string          `json:"currency_code,omitempty"`
@@ -303,7 +343,6 @@ type AddPromotionalCreditsRequestParams struct {
 	CreditType   enum.CreditType `json:"credit_type,omitempty"`
 	Reference    string          `json:"reference,omitempty"`
 }
-
 type DeductPromotionalCreditsRequestParams struct {
 	Amount       *int32          `json:"amount"`
 	CurrencyCode string          `json:"currency_code,omitempty"`
@@ -311,7 +350,6 @@ type DeductPromotionalCreditsRequestParams struct {
 	CreditType   enum.CreditType `json:"credit_type,omitempty"`
 	Reference    string          `json:"reference,omitempty"`
 }
-
 type SetPromotionalCreditsRequestParams struct {
 	Amount       *int32          `json:"amount"`
 	CurrencyCode string          `json:"currency_code,omitempty"`
@@ -319,7 +357,6 @@ type SetPromotionalCreditsRequestParams struct {
 	CreditType   enum.CreditType `json:"credit_type,omitempty"`
 	Reference    string          `json:"reference,omitempty"`
 }
-
 type RecordExcessPaymentRequestParams struct {
 	Transaction *RecordExcessPaymentTransactionParams `json:"transaction,omitempty"`
 	Comment     string                                `json:"comment,omitempty"`
@@ -331,13 +368,14 @@ type RecordExcessPaymentTransactionParams struct {
 	PaymentMethod   enum.PaymentMethod `json:"payment_method"`
 	ReferenceNumber string             `json:"reference_number,omitempty"`
 }
-
 type CollectPaymentRequestParams struct {
 	Amount                      *int32                                   `json:"amount,omitempty"`
 	InvoiceAllocations          []*CollectPaymentInvoiceAllocationParams `json:"invoice_allocations,omitempty"`
 	PaymentSourceId             string                                   `json:"payment_source_id,omitempty"`
+	TokenId                     string                                   `json:"token_id,omitempty"`
 	PaymentMethod               *CollectPaymentPaymentMethodParams       `json:"payment_method,omitempty"`
 	Card                        *CollectPaymentCardParams                `json:"card,omitempty"`
+	PaymentIntent               *CollectPaymentPaymentIntentParams       `json:"payment_intent,omitempty"`
 	ReplacePrimaryPaymentSource *bool                                    `json:"replace_primary_payment_source,omitempty"`
 	RetainPaymentSource         *bool                                    `json:"retain_payment_source,omitempty"`
 }
@@ -367,19 +405,33 @@ type CollectPaymentCardParams struct {
 	BillingZip       string `json:"billing_zip,omitempty"`
 	BillingCountry   string `json:"billing_country,omitempty"`
 }
-
+type CollectPaymentPaymentIntentParams struct {
+	GatewayAccountId  string `json:"gateway_account_id,omitempty"`
+	GwToken           string `json:"gw_token,omitempty"`
+	GwPaymentMethodId string `json:"gw_payment_method_id,omitempty"`
+}
 type DeleteRequestParams struct {
 	DeletePaymentMethod *bool `json:"delete_payment_method,omitempty"`
 }
-
 type MoveRequestParams struct {
 	IdAtFromSite string `json:"id_at_from_site"`
 	FromSite     string `json:"from_site"`
 }
-
 type ChangeBillingDateRequestParams struct {
 	BillingDate          *int32                        `json:"billing_date,omitempty"`
 	BillingDateMode      enum.BillingDateMode          `json:"billing_date_mode,omitempty"`
 	BillingDayOfWeek     customerEnum.BillingDayOfWeek `json:"billing_day_of_week,omitempty"`
 	BillingDayOfWeekMode enum.BillingDayOfWeekMode     `json:"billing_day_of_week_mode,omitempty"`
+}
+type MergeRequestParams struct {
+	FromCustomerId string `json:"from_customer_id"`
+	ToCustomerId   string `json:"to_customer_id"`
+}
+type RelationshipsRequestParams struct {
+	ParentId       string `json:"parent_id,omitempty"`
+	PaymentOwnerId string `json:"payment_owner_id,omitempty"`
+	InvoiceOwnerId string `json:"invoice_owner_id,omitempty"`
+}
+type HierarchyRequestParams struct {
+	HierarchyOperationType enum.HierarchyOperationType `json:"hierarchy_operation_type,omitempty"`
 }
