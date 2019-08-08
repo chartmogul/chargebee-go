@@ -35,5 +35,7 @@ const (
 	GatewayMonerisUs             Gateway = "moneris_us"
 	GatewayMoneris               Gateway = "moneris"
 	GatewayBluesnap              Gateway = "bluesnap"
+	GatewayCybersource           Gateway = "cybersource"
+	GatewayVantiv                Gateway = "vantiv"
 	GatewayNotApplicable         Gateway = "not_applicable"
 )

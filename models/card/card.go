@@ -10,6 +10,7 @@ type Card struct {
 	Status           cardEnum.Status      `json:"status"`
 	Gateway          enum.Gateway         `json:"gateway"`
 	GatewayAccountId string               `json:"gateway_account_id"`
+	RefTxId          string               `json:"ref_tx_id"`
 	FirstName        string               `json:"first_name"`
 	LastName         string               `json:"last_name"`
 	Iin              string               `json:"iin"`
@@ -26,12 +27,14 @@ type Card struct {
 	BillingState     string               `json:"billing_state"`
 	BillingCountry   string               `json:"billing_country"`
 	BillingZip       string               `json:"billing_zip"`
+	CreatedAt        int64                `json:"created_at"`
+	ResourceVersion  int64                `json:"resource_version"`
+	UpdatedAt        int64                `json:"updated_at"`
 	IpAddress        string               `json:"ip_address"`
 	CustomerId       string               `json:"customer_id"`
 	MaskedNumber     string               `json:"masked_number"`
 	Object           string               `json:"object"`
 }
-
 type UpdateCardForCustomerRequestParams struct {
 	Gateway          enum.Gateway                         `json:"gateway,omitempty"`
 	GatewayAccountId string                               `json:"gateway_account_id,omitempty"`
@@ -55,12 +58,10 @@ type UpdateCardForCustomerRequestParams struct {
 type UpdateCardForCustomerCustomerParams struct {
 	VatNumber string `json:"vat_number,omitempty"`
 }
-
 type SwitchGatewayForCustomerRequestParams struct {
 	Gateway          enum.Gateway `json:"gateway,omitempty"`
 	GatewayAccountId string       `json:"gateway_account_id"`
 }
-
 type CopyCardForCustomerRequestParams struct {
 	GatewayAccountId string `json:"gateway_account_id"`
 }
