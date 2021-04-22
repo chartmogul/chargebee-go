@@ -92,12 +92,11 @@ type CreateUsingPaymentIntentRequestParams struct {
 	ReplacePrimaryPaymentSource *bool                                        `json:"replace_primary_payment_source,omitempty"`
 }
 type CreateUsingPaymentIntentPaymentIntentParams struct {
-	Id                string                 `json:"id,omitempty"`
-	GatewayAccountId  string                 `json:"gateway_account_id,omitempty"`
-	GwToken           string                 `json:"gw_token,omitempty"`
-	ReferenceId       string                 `json:"reference_id,omitempty"`
-	GwPaymentMethodId string                 `json:"gw_payment_method_id,omitempty"`
-	AdditionalInfo    map[string]interface{} `json:"additional_info,omitempty"`
+	Id                string `json:"id,omitempty"`
+	GatewayAccountId  string `json:"gateway_account_id,omitempty"`
+	GwToken           string `json:"gw_token,omitempty"`
+	ReferenceId       string `json:"reference_id,omitempty"`
+	GwPaymentMethodId string `json:"gw_payment_method_id,omitempty"`
 }
 type CreateCardRequestParams struct {
 	CustomerId                  string                `json:"customer_id"`

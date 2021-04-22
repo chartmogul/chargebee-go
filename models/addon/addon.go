@@ -2,7 +2,6 @@ package addon
 
 import (
 	"encoding/json"
-
 	"github.com/chargebee/chargebee-go/enum"
 	"github.com/chargebee/chargebee-go/filter"
 	addonEnum "github.com/chargebee/chargebee-go/models/addon/enum"
@@ -38,26 +37,19 @@ type Addon struct {
 	ShippingFrequencyPeriodUnit addonEnum.ShippingFrequencyPeriodUnit `json:"shipping_frequency_period_unit"`
 	ResourceVersion             int64                                 `json:"resource_version"`
 	UpdatedAt                   int64                                 `json:"updated_at"`
-	PriceInDecimal              string                                `json:"price_in_decimal"`
-	IncludedInMrr               bool                                  `json:"included_in_mrr"`
 	InvoiceNotes                string                                `json:"invoice_notes"`
 	Taxable                     bool                                  `json:"taxable"`
 	TaxProfileId                string                                `json:"tax_profile_id"`
 	MetaData                    json.RawMessage                       `json:"meta_data"`
 	Tiers                       []*Tier                               `json:"tiers"`
-	ShowDescriptionInInvoices   bool                                  `json:"show_description_in_invoices"`
-	ShowDescriptionInQuotes     bool                                  `json:"show_description_in_quotes"`
 	CustomField                 map[string]interface{}                `json:"custom_field"`
 	Object                      string                                `json:"object"`
 }
 type Tier struct {
-	StartingUnit          int32  `json:"starting_unit"`
-	EndingUnit            int32  `json:"ending_unit"`
-	Price                 int32  `json:"price"`
-	StartingUnitInDecimal string `json:"starting_unit_in_decimal"`
-	EndingUnitInDecimal   string `json:"ending_unit_in_decimal"`
-	PriceInDecimal        string `json:"price_in_decimal"`
-	Object                string `json:"object"`
+	StartingUnit int32  `json:"starting_unit"`
+	EndingUnit   int32  `json:"ending_unit"`
+	Price        int32  `json:"price"`
+	Object       string `json:"object"`
 }
 type CreateRequestParams struct {
 	Id                          string                                `json:"id"`
@@ -90,19 +82,12 @@ type CreateRequestParams struct {
 	IsShippable                 *bool                                 `json:"is_shippable,omitempty"`
 	ShippingFrequencyPeriod     *int32                                `json:"shipping_frequency_period,omitempty"`
 	ShippingFrequencyPeriodUnit addonEnum.ShippingFrequencyPeriodUnit `json:"shipping_frequency_period_unit,omitempty"`
-	IncludedInMrr               *bool                                 `json:"included_in_mrr,omitempty"`
-	ShowDescriptionInInvoices   *bool                                 `json:"show_description_in_invoices,omitempty"`
-	ShowDescriptionInQuotes     *bool                                 `json:"show_description_in_quotes,omitempty"`
-	PriceInDecimal              string                                `json:"price_in_decimal,omitempty"`
 	Status                      addonEnum.Status                      `json:"status,omitempty"`
 }
 type CreateTierParams struct {
-	StartingUnit          *int32 `json:"starting_unit,omitempty"`
-	EndingUnit            *int32 `json:"ending_unit,omitempty"`
-	Price                 *int32 `json:"price,omitempty"`
-	StartingUnitInDecimal string `json:"starting_unit_in_decimal,omitempty"`
-	EndingUnitInDecimal   string `json:"ending_unit_in_decimal,omitempty"`
-	PriceInDecimal        string `json:"price_in_decimal,omitempty"`
+	StartingUnit *int32 `json:"starting_unit,omitempty"`
+	EndingUnit   *int32 `json:"ending_unit,omitempty"`
+	Price        *int32 `json:"price,omitempty"`
 }
 type UpdateRequestParams struct {
 	Name                        string                                `json:"name,omitempty"`
@@ -134,18 +119,11 @@ type UpdateRequestParams struct {
 	IsShippable                 *bool                                 `json:"is_shippable,omitempty"`
 	ShippingFrequencyPeriod     *int32                                `json:"shipping_frequency_period,omitempty"`
 	ShippingFrequencyPeriodUnit addonEnum.ShippingFrequencyPeriodUnit `json:"shipping_frequency_period_unit,omitempty"`
-	IncludedInMrr               *bool                                 `json:"included_in_mrr,omitempty"`
-	ShowDescriptionInInvoices   *bool                                 `json:"show_description_in_invoices,omitempty"`
-	ShowDescriptionInQuotes     *bool                                 `json:"show_description_in_quotes,omitempty"`
-	PriceInDecimal              string                                `json:"price_in_decimal,omitempty"`
 }
 type UpdateTierParams struct {
-	StartingUnit          *int32 `json:"starting_unit,omitempty"`
-	EndingUnit            *int32 `json:"ending_unit,omitempty"`
-	Price                 *int32 `json:"price,omitempty"`
-	StartingUnitInDecimal string `json:"starting_unit_in_decimal,omitempty"`
-	EndingUnitInDecimal   string `json:"ending_unit_in_decimal,omitempty"`
-	PriceInDecimal        string `json:"price_in_decimal,omitempty"`
+	StartingUnit *int32 `json:"starting_unit,omitempty"`
+	EndingUnit   *int32 `json:"ending_unit,omitempty"`
+	Price        *int32 `json:"price,omitempty"`
 }
 type ListRequestParams struct {
 	Limit        *int32                  `json:"limit,omitempty"`
@@ -160,7 +138,6 @@ type ListRequestParams struct {
 	PeriodUnit   *filter.EnumFilter      `json:"period_unit,omitempty"`
 	Status       *filter.EnumFilter      `json:"status,omitempty"`
 	UpdatedAt    *filter.TimestampFilter `json:"updated_at,omitempty"`
-	CurrencyCode *filter.StringFilter    `json:"currency_code,omitempty"`
 }
 type CopyRequestParams struct {
 	FromSite       string `json:"from_site"`

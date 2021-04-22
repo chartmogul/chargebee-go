@@ -12,5 +12,4 @@ const (
 	TypeExtendSubscription   Type = "extend_subscription"
 	TypeCheckoutGift         Type = "checkout_gift"
 	TypeClaimGift            Type = "claim_gift"
-	TypeCheckoutOneTime      Type = "checkout_one_time"
 )

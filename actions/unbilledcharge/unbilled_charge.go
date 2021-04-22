@@ -2,14 +2,10 @@ package unbilledcharge
 
 import (
 	"fmt"
-
 	"github.com/chargebee/chargebee-go"
 	"github.com/chargebee/chargebee-go/models/unbilledcharge"
 )
 
-func Create(params *unbilledcharge.CreateRequestParams) chargebee.RequestObj {
-	return chargebee.Send("POST", fmt.Sprintf("/unbilled_charges"), params)
-}
 func InvoiceUnbilledCharges(params *unbilledcharge.InvoiceUnbilledChargesRequestParams) chargebee.RequestObj {
 	return chargebee.Send("POST", fmt.Sprintf("/unbilled_charges/invoice_unbilled_charges"), params)
 }

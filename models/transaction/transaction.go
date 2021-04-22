@@ -62,7 +62,6 @@ type LinkedCreditNote struct {
 	AppliedAmount        int32                     `json:"applied_amount"`
 	AppliedAt            int64                     `json:"applied_at"`
 	CnReasonCode         creditNoteEnum.ReasonCode `json:"cn_reason_code"`
-	CnCreateReasonCode   string                    `json:"cn_create_reason_code"`
 	CnDate               int64                     `json:"cn_date"`
 	CnTotal              int32                     `json:"cn_total"`
 	CnStatus             creditNoteEnum.Status     `json:"cn_status"`
@@ -95,10 +94,6 @@ type RecordRefundRequestParams struct {
 	Date            *int64             `json:"date"`
 	ReferenceNumber string             `json:"reference_number,omitempty"`
 	Comment         string             `json:"comment,omitempty"`
-}
-type RefundRequestParams struct {
-	Amount  *int32 `json:"amount,omitempty"`
-	Comment string `json:"comment,omitempty"`
 }
 type ListRequestParams struct {
 	Limit            *int32                  `json:"limit,omitempty"`

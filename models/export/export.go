@@ -31,9 +31,6 @@ type RevenueRecognitionRequestParams struct {
 	Invoice          *RevenueRecognitionInvoiceParams      `json:"invoice,omitempty"`
 	PaymentOwner     *filter.StringFilter                  `json:"payment_owner,omitempty"`
 	Subscription     *RevenueRecognitionSubscriptionParams `json:"subscription,omitempty"`
-	ItemId           *filter.StringFilter                  `json:"item_id,omitempty"`
-	ItemPriceId      *filter.StringFilter                  `json:"item_price_id,omitempty"`
-	CancelReasonCode *filter.StringFilter                  `json:"cancel_reason_code,omitempty"`
 	Customer         *RevenueRecognitionCustomerParams     `json:"customer,omitempty"`
 	Relationship     *RevenueRecognitionRelationshipParams `json:"relationship,omitempty"`
 }
@@ -65,22 +62,18 @@ type RevenueRecognitionSubscriptionParams struct {
 	CancelledAt            *filter.TimestampFilter `json:"cancelled_at,omitempty"`
 	HasScheduledChanges    *filter.BooleanFilter   `json:"has_scheduled_changes,omitempty"`
 	UpdatedAt              *filter.TimestampFilter `json:"updated_at,omitempty"`
-	OfflinePaymentMethod   *filter.EnumFilter      `json:"offline_payment_method,omitempty"`
-	AutoCloseInvoices      *filter.BooleanFilter   `json:"auto_close_invoices,omitempty"`
 }
 type RevenueRecognitionCustomerParams struct {
-	Id                   *filter.StringFilter    `json:"id,omitempty"`
-	FirstName            *filter.StringFilter    `json:"first_name,omitempty"`
-	LastName             *filter.StringFilter    `json:"last_name,omitempty"`
-	Email                *filter.StringFilter    `json:"email,omitempty"`
-	Company              *filter.StringFilter    `json:"company,omitempty"`
-	Phone                *filter.StringFilter    `json:"phone,omitempty"`
-	AutoCollection       *filter.EnumFilter      `json:"auto_collection,omitempty"`
-	Taxability           *filter.EnumFilter      `json:"taxability,omitempty"`
-	CreatedAt            *filter.TimestampFilter `json:"created_at,omitempty"`
-	UpdatedAt            *filter.TimestampFilter `json:"updated_at,omitempty"`
-	OfflinePaymentMethod *filter.EnumFilter      `json:"offline_payment_method,omitempty"`
-	AutoCloseInvoices    *filter.BooleanFilter   `json:"auto_close_invoices,omitempty"`
+	Id             *filter.StringFilter    `json:"id,omitempty"`
+	FirstName      *filter.StringFilter    `json:"first_name,omitempty"`
+	LastName       *filter.StringFilter    `json:"last_name,omitempty"`
+	Email          *filter.StringFilter    `json:"email,omitempty"`
+	Company        *filter.StringFilter    `json:"company,omitempty"`
+	Phone          *filter.StringFilter    `json:"phone,omitempty"`
+	AutoCollection *filter.EnumFilter      `json:"auto_collection,omitempty"`
+	Taxability     *filter.EnumFilter      `json:"taxability,omitempty"`
+	CreatedAt      *filter.TimestampFilter `json:"created_at,omitempty"`
+	UpdatedAt      *filter.TimestampFilter `json:"updated_at,omitempty"`
 }
 type RevenueRecognitionRelationshipParams struct {
 	ParentId       *filter.StringFilter `json:"parent_id,omitempty"`
@@ -98,9 +91,6 @@ type DeferredRevenueRequestParams struct {
 	Invoice          *DeferredRevenueInvoiceParams      `json:"invoice,omitempty"`
 	PaymentOwner     *filter.StringFilter               `json:"payment_owner,omitempty"`
 	Subscription     *DeferredRevenueSubscriptionParams `json:"subscription,omitempty"`
-	ItemId           *filter.StringFilter               `json:"item_id,omitempty"`
-	ItemPriceId      *filter.StringFilter               `json:"item_price_id,omitempty"`
-	CancelReasonCode *filter.StringFilter               `json:"cancel_reason_code,omitempty"`
 	Customer         *DeferredRevenueCustomerParams     `json:"customer,omitempty"`
 	Relationship     *DeferredRevenueRelationshipParams `json:"relationship,omitempty"`
 }
@@ -132,22 +122,18 @@ type DeferredRevenueSubscriptionParams struct {
 	CancelledAt            *filter.TimestampFilter `json:"cancelled_at,omitempty"`
 	HasScheduledChanges    *filter.BooleanFilter   `json:"has_scheduled_changes,omitempty"`
 	UpdatedAt              *filter.TimestampFilter `json:"updated_at,omitempty"`
-	OfflinePaymentMethod   *filter.EnumFilter      `json:"offline_payment_method,omitempty"`
-	AutoCloseInvoices      *filter.BooleanFilter   `json:"auto_close_invoices,omitempty"`
 }
 type DeferredRevenueCustomerParams struct {
-	Id                   *filter.StringFilter    `json:"id,omitempty"`
-	FirstName            *filter.StringFilter    `json:"first_name,omitempty"`
-	LastName             *filter.StringFilter    `json:"last_name,omitempty"`
-	Email                *filter.StringFilter    `json:"email,omitempty"`
-	Company              *filter.StringFilter    `json:"company,omitempty"`
-	Phone                *filter.StringFilter    `json:"phone,omitempty"`
-	AutoCollection       *filter.EnumFilter      `json:"auto_collection,omitempty"`
-	Taxability           *filter.EnumFilter      `json:"taxability,omitempty"`
-	CreatedAt            *filter.TimestampFilter `json:"created_at,omitempty"`
-	UpdatedAt            *filter.TimestampFilter `json:"updated_at,omitempty"`
-	OfflinePaymentMethod *filter.EnumFilter      `json:"offline_payment_method,omitempty"`
-	AutoCloseInvoices    *filter.BooleanFilter   `json:"auto_close_invoices,omitempty"`
+	Id             *filter.StringFilter    `json:"id,omitempty"`
+	FirstName      *filter.StringFilter    `json:"first_name,omitempty"`
+	LastName       *filter.StringFilter    `json:"last_name,omitempty"`
+	Email          *filter.StringFilter    `json:"email,omitempty"`
+	Company        *filter.StringFilter    `json:"company,omitempty"`
+	Phone          *filter.StringFilter    `json:"phone,omitempty"`
+	AutoCollection *filter.EnumFilter      `json:"auto_collection,omitempty"`
+	Taxability     *filter.EnumFilter      `json:"taxability,omitempty"`
+	CreatedAt      *filter.TimestampFilter `json:"created_at,omitempty"`
+	UpdatedAt      *filter.TimestampFilter `json:"updated_at,omitempty"`
 }
 type DeferredRevenueRelationshipParams struct {
 	ParentId       *filter.StringFilter `json:"parent_id,omitempty"`
@@ -155,8 +141,7 @@ type DeferredRevenueRelationshipParams struct {
 	InvoiceOwnerId *filter.StringFilter `json:"invoice_owner_id,omitempty"`
 }
 type PlansRequestParams struct {
-	Plan         *PlansPlanParams     `json:"plan,omitempty"`
-	CurrencyCode *filter.StringFilter `json:"currency_code,omitempty"`
+	Plan *PlansPlanParams `json:"plan,omitempty"`
 }
 type PlansPlanParams struct {
 	Id                 *filter.StringFilter    `json:"id,omitempty"`
@@ -172,8 +157,7 @@ type PlansPlanParams struct {
 	UpdatedAt          *filter.TimestampFilter `json:"updated_at,omitempty"`
 }
 type AddonsRequestParams struct {
-	Addon        *AddonsAddonParams   `json:"addon,omitempty"`
-	CurrencyCode *filter.StringFilter `json:"currency_code,omitempty"`
+	Addon *AddonsAddonParams `json:"addon,omitempty"`
 }
 type AddonsAddonParams struct {
 	Id         *filter.StringFilter    `json:"id,omitempty"`
@@ -186,8 +170,7 @@ type AddonsAddonParams struct {
 	UpdatedAt  *filter.TimestampFilter `json:"updated_at,omitempty"`
 }
 type CouponsRequestParams struct {
-	Coupon       *CouponsCouponParams `json:"coupon,omitempty"`
-	CurrencyCode *filter.StringFilter `json:"currency_code,omitempty"`
+	Coupon *CouponsCouponParams `json:"coupon,omitempty"`
 }
 type CouponsCouponParams struct {
 	Id           *filter.StringFilter    `json:"id,omitempty"`
@@ -204,18 +187,16 @@ type CustomersRequestParams struct {
 	Relationship *CustomersRelationshipParams `json:"relationship,omitempty"`
 }
 type CustomersCustomerParams struct {
-	Id                   *filter.StringFilter    `json:"id,omitempty"`
-	FirstName            *filter.StringFilter    `json:"first_name,omitempty"`
-	LastName             *filter.StringFilter    `json:"last_name,omitempty"`
-	Email                *filter.StringFilter    `json:"email,omitempty"`
-	Company              *filter.StringFilter    `json:"company,omitempty"`
-	Phone                *filter.StringFilter    `json:"phone,omitempty"`
-	AutoCollection       *filter.EnumFilter      `json:"auto_collection,omitempty"`
-	Taxability           *filter.EnumFilter      `json:"taxability,omitempty"`
-	CreatedAt            *filter.TimestampFilter `json:"created_at,omitempty"`
-	UpdatedAt            *filter.TimestampFilter `json:"updated_at,omitempty"`
-	OfflinePaymentMethod *filter.EnumFilter      `json:"offline_payment_method,omitempty"`
-	AutoCloseInvoices    *filter.BooleanFilter   `json:"auto_close_invoices,omitempty"`
+	Id             *filter.StringFilter    `json:"id,omitempty"`
+	FirstName      *filter.StringFilter    `json:"first_name,omitempty"`
+	LastName       *filter.StringFilter    `json:"last_name,omitempty"`
+	Email          *filter.StringFilter    `json:"email,omitempty"`
+	Company        *filter.StringFilter    `json:"company,omitempty"`
+	Phone          *filter.StringFilter    `json:"phone,omitempty"`
+	AutoCollection *filter.EnumFilter      `json:"auto_collection,omitempty"`
+	Taxability     *filter.EnumFilter      `json:"taxability,omitempty"`
+	CreatedAt      *filter.TimestampFilter `json:"created_at,omitempty"`
+	UpdatedAt      *filter.TimestampFilter `json:"updated_at,omitempty"`
 }
 type CustomersRelationshipParams struct {
 	ParentId       *filter.StringFilter `json:"parent_id,omitempty"`
@@ -223,10 +204,7 @@ type CustomersRelationshipParams struct {
 	InvoiceOwnerId *filter.StringFilter `json:"invoice_owner_id,omitempty"`
 }
 type SubscriptionsRequestParams struct {
-	Subscription     *SubscriptionsSubscriptionParams `json:"subscription,omitempty"`
-	ItemId           *filter.StringFilter             `json:"item_id,omitempty"`
-	ItemPriceId      *filter.StringFilter             `json:"item_price_id,omitempty"`
-	CancelReasonCode *filter.StringFilter             `json:"cancel_reason_code,omitempty"`
+	Subscription *SubscriptionsSubscriptionParams `json:"subscription,omitempty"`
 }
 type SubscriptionsSubscriptionParams struct {
 	Id                     *filter.StringFilter    `json:"id,omitempty"`
@@ -241,8 +219,6 @@ type SubscriptionsSubscriptionParams struct {
 	CancelledAt            *filter.TimestampFilter `json:"cancelled_at,omitempty"`
 	HasScheduledChanges    *filter.BooleanFilter   `json:"has_scheduled_changes,omitempty"`
 	UpdatedAt              *filter.TimestampFilter `json:"updated_at,omitempty"`
-	OfflinePaymentMethod   *filter.EnumFilter      `json:"offline_payment_method,omitempty"`
-	AutoCloseInvoices      *filter.BooleanFilter   `json:"auto_close_invoices,omitempty"`
 }
 type InvoicesRequestParams struct {
 	Invoice      *InvoicesInvoiceParams `json:"invoice,omitempty"`
@@ -275,7 +251,6 @@ type CreditNotesCreditNoteParams struct {
 	ReferenceInvoiceId *filter.StringFilter    `json:"reference_invoice_id,omitempty"`
 	Type               *filter.EnumFilter      `json:"type,omitempty"`
 	ReasonCode         *filter.EnumFilter      `json:"reason_code,omitempty"`
-	CreateReasonCode   *filter.StringFilter    `json:"create_reason_code,omitempty"`
 	Status             *filter.EnumFilter      `json:"status,omitempty"`
 	Date               *filter.TimestampFilter `json:"date,omitempty"`
 	Total              *filter.NumberFilter    `json:"total,omitempty"`
@@ -325,66 +300,4 @@ type OrdersOrderParams struct {
 	RefundableCredits       *filter.NumberFilter    `json:"refundable_credits,omitempty"`
 	RefundableCreditsIssued *filter.NumberFilter    `json:"refundable_credits_issued,omitempty"`
 	UpdatedAt               *filter.TimestampFilter `json:"updated_at,omitempty"`
-}
-type ItemFamiliesRequestParams struct {
-	ItemFamily *ItemFamiliesItemFamilyParams `json:"item_family,omitempty"`
-}
-type ItemFamiliesItemFamilyParams struct {
-	Id   *filter.StringFilter `json:"id,omitempty"`
-	Name *filter.StringFilter `json:"name,omitempty"`
-}
-type ItemsRequestParams struct {
-	Item *ItemsItemParams `json:"item,omitempty"`
-}
-type ItemsItemParams struct {
-	Id                 *filter.StringFilter    `json:"id,omitempty"`
-	ItemFamilyId       *filter.StringFilter    `json:"item_family_id,omitempty"`
-	Type               *filter.EnumFilter      `json:"type,omitempty"`
-	Name               *filter.StringFilter    `json:"name,omitempty"`
-	ItemApplicability  *filter.EnumFilter      `json:"item_applicability,omitempty"`
-	Status             *filter.EnumFilter      `json:"status,omitempty"`
-	IsGiftable         *filter.BooleanFilter   `json:"is_giftable,omitempty"`
-	UpdatedAt          *filter.TimestampFilter `json:"updated_at,omitempty"`
-	EnabledForCheckout *filter.BooleanFilter   `json:"enabled_for_checkout,omitempty"`
-	EnabledInPortal    *filter.BooleanFilter   `json:"enabled_in_portal,omitempty"`
-	Metered            *filter.BooleanFilter   `json:"metered,omitempty"`
-	UsageCalculation   *filter.EnumFilter      `json:"usage_calculation,omitempty"`
-}
-type ItemPricesRequestParams struct {
-	ItemPrice    *ItemPricesItemPriceParams `json:"item_price,omitempty"`
-	ItemFamilyId *filter.StringFilter       `json:"item_family_id,omitempty"`
-	ItemType     *filter.EnumFilter         `json:"item_type,omitempty"`
-	CurrencyCode *filter.StringFilter       `json:"currency_code,omitempty"`
-}
-type ItemPricesItemPriceParams struct {
-	Id              *filter.StringFilter    `json:"id,omitempty"`
-	Name            *filter.StringFilter    `json:"name,omitempty"`
-	PricingModel    *filter.EnumFilter      `json:"pricing_model,omitempty"`
-	ItemId          *filter.StringFilter    `json:"item_id,omitempty"`
-	TrialPeriod     *filter.NumberFilter    `json:"trial_period,omitempty"`
-	TrialPeriodUnit *filter.EnumFilter      `json:"trial_period_unit,omitempty"`
-	Status          *filter.EnumFilter      `json:"status,omitempty"`
-	UpdatedAt       *filter.TimestampFilter `json:"updated_at,omitempty"`
-	PeriodUnit      *filter.EnumFilter      `json:"period_unit,omitempty"`
-	Period          *filter.NumberFilter    `json:"period,omitempty"`
-}
-type AttachedItemsRequestParams struct {
-	AttachedItem *AttachedItemsAttachedItemParams `json:"attached_item,omitempty"`
-	ItemType     *filter.EnumFilter               `json:"item_type,omitempty"`
-}
-type AttachedItemsAttachedItemParams struct {
-	Id            *filter.StringFilter `json:"id,omitempty"`
-	ItemId        *filter.StringFilter `json:"item_id,omitempty"`
-	Type          *filter.EnumFilter   `json:"type,omitempty"`
-	ChargeOnEvent *filter.EnumFilter   `json:"charge_on_event,omitempty"`
-	ParentItemId  *filter.StringFilter `json:"parent_item_id,omitempty"`
-}
-type DifferentialPricesRequestParams struct {
-	DifferentialPrice *DifferentialPricesDifferentialPriceParams `json:"differential_price,omitempty"`
-	ItemId            *filter.StringFilter                       `json:"item_id,omitempty"`
-}
-type DifferentialPricesDifferentialPriceParams struct {
-	ItemPriceId  *filter.StringFilter `json:"item_price_id,omitempty"`
-	Id           *filter.StringFilter `json:"id,omitempty"`
-	ParentItemId *filter.StringFilter `json:"parent_item_id,omitempty"`
 }

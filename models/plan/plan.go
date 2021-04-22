@@ -2,7 +2,6 @@ package plan
 
 import (
 	"encoding/json"
-
 	"github.com/chargebee/chargebee-go/enum"
 	"github.com/chargebee/chargebee-go/filter"
 	planEnum "github.com/chargebee/chargebee-go/models/plan/enum"
@@ -47,8 +46,6 @@ type Plan struct {
 	UpdatedAt                   int64                                `json:"updated_at"`
 	Giftable                    bool                                 `json:"giftable"`
 	ClaimUrl                    string                               `json:"claim_url"`
-	FreeQuantityInDecimal       string                               `json:"free_quantity_in_decimal"`
-	PriceInDecimal              string                               `json:"price_in_decimal"`
 	InvoiceNotes                string                               `json:"invoice_notes"`
 	Taxable                     bool                                 `json:"taxable"`
 	TaxProfileId                string                               `json:"tax_profile_id"`
@@ -57,39 +54,32 @@ type Plan struct {
 	ApplicableAddons            []*ApplicableAddon                   `json:"applicable_addons"`
 	AttachedAddons              []*AttachedAddon                     `json:"attached_addons"`
 	EventBasedAddons            []*EventBasedAddon                   `json:"event_based_addons"`
-	ShowDescriptionInInvoices   bool                                 `json:"show_description_in_invoices"`
-	ShowDescriptionInQuotes     bool                                 `json:"show_description_in_quotes"`
 	CustomField                 map[string]interface{}               `json:"custom_field"`
 	Object                      string                               `json:"object"`
 }
 type Tier struct {
-	StartingUnit          int32  `json:"starting_unit"`
-	EndingUnit            int32  `json:"ending_unit"`
-	Price                 int32  `json:"price"`
-	StartingUnitInDecimal string `json:"starting_unit_in_decimal"`
-	EndingUnitInDecimal   string `json:"ending_unit_in_decimal"`
-	PriceInDecimal        string `json:"price_in_decimal"`
-	Object                string `json:"object"`
+	StartingUnit int32  `json:"starting_unit"`
+	EndingUnit   int32  `json:"ending_unit"`
+	Price        int32  `json:"price"`
+	Object       string `json:"object"`
 }
 type ApplicableAddon struct {
 	Id     string `json:"id"`
 	Object string `json:"object"`
 }
 type AttachedAddon struct {
-	Id                string                     `json:"id"`
-	Quantity          int32                      `json:"quantity"`
-	BillingCycles     int32                      `json:"billing_cycles"`
-	Type              planEnum.AttachedAddonType `json:"type"`
-	QuantityInDecimal string                     `json:"quantity_in_decimal"`
-	Object            string                     `json:"object"`
+	Id            string                     `json:"id"`
+	Quantity      int32                      `json:"quantity"`
+	BillingCycles int32                      `json:"billing_cycles"`
+	Type          planEnum.AttachedAddonType `json:"type"`
+	Object        string                     `json:"object"`
 }
 type EventBasedAddon struct {
-	Id                string       `json:"id"`
-	Quantity          int32        `json:"quantity"`
-	OnEvent           enum.OnEvent `json:"on_event"`
-	ChargeOnce        bool         `json:"charge_once"`
-	QuantityInDecimal string       `json:"quantity_in_decimal"`
-	Object            string       `json:"object"`
+	Id         string       `json:"id"`
+	Quantity   int32        `json:"quantity"`
+	OnEvent    enum.OnEvent `json:"on_event"`
+	ChargeOnce bool         `json:"charge_once"`
+	Object     string       `json:"object"`
 }
 type CreateRequestParams struct {
 	Id                          string                               `json:"id"`
@@ -102,14 +92,12 @@ type CreateRequestParams struct {
 	PeriodUnit                  planEnum.PeriodUnit                  `json:"period_unit,omitempty"`
 	SetupCost                   *int32                               `json:"setup_cost,omitempty"`
 	Price                       *int32                               `json:"price,omitempty"`
-	PriceInDecimal              string                               `json:"price_in_decimal,omitempty"`
 	Tiers                       []*CreateTierParams                  `json:"tiers,omitempty"`
 	CurrencyCode                string                               `json:"currency_code,omitempty"`
 	BillingCycles               *int32                               `json:"billing_cycles,omitempty"`
 	PricingModel                enum.PricingModel                    `json:"pricing_model,omitempty"`
 	ChargeModel                 planEnum.ChargeModel                 `json:"charge_model,omitempty"`
 	FreeQuantity                *int32                               `json:"free_quantity,omitempty"`
-	FreeQuantityInDecimal       string                               `json:"free_quantity_in_decimal,omitempty"`
 	AddonApplicability          planEnum.AddonApplicability          `json:"addon_applicability,omitempty"`
 	DowngradePenalty            *float64                             `json:"downgrade_penalty,omitempty"`
 	RedirectUrl                 string                               `json:"redirect_url,omitempty"`
@@ -134,36 +122,29 @@ type CreateRequestParams struct {
 	AttachedAddons              []*CreateAttachedAddonParams         `json:"attached_addons,omitempty"`
 	InvoiceNotes                string                               `json:"invoice_notes,omitempty"`
 	MetaData                    map[string]interface{}               `json:"meta_data,omitempty"`
-	ShowDescriptionInInvoices   *bool                                `json:"show_description_in_invoices,omitempty"`
-	ShowDescriptionInQuotes     *bool                                `json:"show_description_in_quotes,omitempty"`
 	Giftable                    *bool                                `json:"giftable,omitempty"`
 	Status                      planEnum.Status                      `json:"status,omitempty"`
 	ClaimUrl                    string                               `json:"claim_url,omitempty"`
 }
 type CreateTierParams struct {
-	StartingUnit          *int32 `json:"starting_unit,omitempty"`
-	EndingUnit            *int32 `json:"ending_unit,omitempty"`
-	Price                 *int32 `json:"price,omitempty"`
-	StartingUnitInDecimal string `json:"starting_unit_in_decimal,omitempty"`
-	EndingUnitInDecimal   string `json:"ending_unit_in_decimal,omitempty"`
-	PriceInDecimal        string `json:"price_in_decimal,omitempty"`
+	StartingUnit *int32 `json:"starting_unit,omitempty"`
+	EndingUnit   *int32 `json:"ending_unit,omitempty"`
+	Price        *int32 `json:"price,omitempty"`
 }
 type CreateApplicableAddonParams struct {
 	Id string `json:"id,omitempty"`
 }
 type CreateEventBasedAddonParams struct {
-	Id                string       `json:"id,omitempty"`
-	Quantity          *int32       `json:"quantity,omitempty"`
-	QuantityInDecimal string       `json:"quantity_in_decimal,omitempty"`
-	OnEvent           enum.OnEvent `json:"on_event,omitempty"`
-	ChargeOnce        *bool        `json:"charge_once,omitempty"`
+	Id         string       `json:"id,omitempty"`
+	Quantity   *int32       `json:"quantity,omitempty"`
+	OnEvent    enum.OnEvent `json:"on_event,omitempty"`
+	ChargeOnce *bool        `json:"charge_once,omitempty"`
 }
 type CreateAttachedAddonParams struct {
-	Id                string                     `json:"id,omitempty"`
-	Quantity          *int32                     `json:"quantity,omitempty"`
-	QuantityInDecimal string                     `json:"quantity_in_decimal,omitempty"`
-	BillingCycles     *int32                     `json:"billing_cycles,omitempty"`
-	Type              planEnum.AttachedAddonType `json:"type,omitempty"`
+	Id            string                     `json:"id,omitempty"`
+	Quantity      *int32                     `json:"quantity,omitempty"`
+	BillingCycles *int32                     `json:"billing_cycles,omitempty"`
+	Type          planEnum.AttachedAddonType `json:"type,omitempty"`
 }
 type UpdateRequestParams struct {
 	Name                        string                               `json:"name,omitempty"`
@@ -175,14 +156,12 @@ type UpdateRequestParams struct {
 	PeriodUnit                  planEnum.PeriodUnit                  `json:"period_unit,omitempty"`
 	SetupCost                   *int32                               `json:"setup_cost,omitempty"`
 	Price                       *int32                               `json:"price,omitempty"`
-	PriceInDecimal              string                               `json:"price_in_decimal,omitempty"`
 	Tiers                       []*UpdateTierParams                  `json:"tiers,omitempty"`
 	CurrencyCode                string                               `json:"currency_code,omitempty"`
 	BillingCycles               *int32                               `json:"billing_cycles,omitempty"`
 	PricingModel                enum.PricingModel                    `json:"pricing_model,omitempty"`
 	ChargeModel                 planEnum.ChargeModel                 `json:"charge_model,omitempty"`
 	FreeQuantity                *int32                               `json:"free_quantity,omitempty"`
-	FreeQuantityInDecimal       string                               `json:"free_quantity_in_decimal,omitempty"`
 	AddonApplicability          planEnum.AddonApplicability          `json:"addon_applicability,omitempty"`
 	DowngradePenalty            *float64                             `json:"downgrade_penalty,omitempty"`
 	RedirectUrl                 string                               `json:"redirect_url,omitempty"`
@@ -207,33 +186,26 @@ type UpdateRequestParams struct {
 	AttachedAddons              []*UpdateAttachedAddonParams         `json:"attached_addons,omitempty"`
 	InvoiceNotes                string                               `json:"invoice_notes,omitempty"`
 	MetaData                    map[string]interface{}               `json:"meta_data,omitempty"`
-	ShowDescriptionInInvoices   *bool                                `json:"show_description_in_invoices,omitempty"`
-	ShowDescriptionInQuotes     *bool                                `json:"show_description_in_quotes,omitempty"`
 }
 type UpdateTierParams struct {
-	StartingUnit          *int32 `json:"starting_unit,omitempty"`
-	EndingUnit            *int32 `json:"ending_unit,omitempty"`
-	Price                 *int32 `json:"price,omitempty"`
-	StartingUnitInDecimal string `json:"starting_unit_in_decimal,omitempty"`
-	EndingUnitInDecimal   string `json:"ending_unit_in_decimal,omitempty"`
-	PriceInDecimal        string `json:"price_in_decimal,omitempty"`
+	StartingUnit *int32 `json:"starting_unit,omitempty"`
+	EndingUnit   *int32 `json:"ending_unit,omitempty"`
+	Price        *int32 `json:"price,omitempty"`
 }
 type UpdateApplicableAddonParams struct {
 	Id string `json:"id,omitempty"`
 }
 type UpdateEventBasedAddonParams struct {
-	Id                string       `json:"id,omitempty"`
-	Quantity          *int32       `json:"quantity,omitempty"`
-	QuantityInDecimal string       `json:"quantity_in_decimal,omitempty"`
-	OnEvent           enum.OnEvent `json:"on_event,omitempty"`
-	ChargeOnce        *bool        `json:"charge_once,omitempty"`
+	Id         string       `json:"id,omitempty"`
+	Quantity   *int32       `json:"quantity,omitempty"`
+	OnEvent    enum.OnEvent `json:"on_event,omitempty"`
+	ChargeOnce *bool        `json:"charge_once,omitempty"`
 }
 type UpdateAttachedAddonParams struct {
-	Id                string                     `json:"id,omitempty"`
-	Quantity          *int32                     `json:"quantity,omitempty"`
-	QuantityInDecimal string                     `json:"quantity_in_decimal,omitempty"`
-	BillingCycles     *int32                     `json:"billing_cycles,omitempty"`
-	Type              planEnum.AttachedAddonType `json:"type,omitempty"`
+	Id            string                     `json:"id,omitempty"`
+	Quantity      *int32                     `json:"quantity,omitempty"`
+	BillingCycles *int32                     `json:"billing_cycles,omitempty"`
+	Type          planEnum.AttachedAddonType `json:"type,omitempty"`
 }
 type ListRequestParams struct {
 	Limit              *int32                  `json:"limit,omitempty"`
@@ -251,7 +223,6 @@ type ListRequestParams struct {
 	PricingModel       *filter.EnumFilter      `json:"pricing_model,omitempty"`
 	Status             *filter.EnumFilter      `json:"status,omitempty"`
 	UpdatedAt          *filter.TimestampFilter `json:"updated_at,omitempty"`
-	CurrencyCode       *filter.StringFilter    `json:"currency_code,omitempty"`
 }
 type CopyRequestParams struct {
 	FromSite       string `json:"from_site"`

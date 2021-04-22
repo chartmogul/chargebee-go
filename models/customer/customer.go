@@ -2,7 +2,6 @@ package customer
 
 import (
 	"encoding/json"
-
 	"github.com/chargebee/chargebee-go/enum"
 	"github.com/chargebee/chargebee-go/filter"
 	customerEnum "github.com/chargebee/chargebee-go/models/customer/enum"
@@ -17,7 +16,6 @@ type Customer struct {
 	Company                          string                        `json:"company"`
 	VatNumber                        string                        `json:"vat_number"`
 	AutoCollection                   enum.AutoCollection           `json:"auto_collection"`
-	OfflinePaymentMethod             enum.OfflinePaymentMethod     `json:"offline_payment_method"`
 	NetTermDays                      int32                         `json:"net_term_days"`
 	VatNumberValidatedTime           int64                         `json:"vat_number_validated_time"`
 	VatNumberStatus                  customerEnum.VatNumberStatus  `json:"vat_number_status"`
@@ -32,12 +30,12 @@ type Customer struct {
 	ResourceVersion                  int64                         `json:"resource_version"`
 	UpdatedAt                        int64                         `json:"updated_at"`
 	Locale                           string                        `json:"locale"`
+	ConsolidatedInvoicing            bool                          `json:"consolidated_invoicing"`
 	BillingDate                      int32                         `json:"billing_date"`
 	BillingDateMode                  enum.BillingDateMode          `json:"billing_date_mode"`
 	BillingDayOfWeek                 customerEnum.BillingDayOfWeek `json:"billing_day_of_week"`
 	BillingDayOfWeekMode             enum.BillingDayOfWeekMode     `json:"billing_day_of_week_mode"`
 	PiiCleared                       customerEnum.PiiCleared       `json:"pii_cleared"`
-	AutoCloseInvoices                bool                          `json:"auto_close_invoices"`
 	CardStatus                       customerEnum.CardStatus       `json:"card_status"`
 	FraudFlag                        customerEnum.FraudFlag        `json:"fraud_flag"`
 	PrimaryPaymentSourceId           string                        `json:"primary_payment_source_id"`
@@ -56,14 +54,10 @@ type Customer struct {
 	MetaData                         json.RawMessage               `json:"meta_data"`
 	Deleted                          bool                          `json:"deleted"`
 	RegisteredForGst                 bool                          `json:"registered_for_gst"`
-	ConsolidatedInvoicing            bool                          `json:"consolidated_invoicing"`
-	CustomerType                     enum.CustomerType             `json:"customer_type"`
 	BusinessCustomerWithoutVatNumber bool                          `json:"business_customer_without_vat_number"`
+	CustomerType                     enum.CustomerType             `json:"customer_type"`
 	ClientProfileId                  string                        `json:"client_profile_id"`
 	Relationship                     *Relationship                 `json:"relationship"`
-	UseDefaultHierarchySettings      bool                          `json:"use_default_hierarchy_settings"`
-	ParentAccountAccess              *ParentAccountAccess          `json:"parent_account_access"`
-	ChildAccountAccess               *ChildAccountAccess           `json:"child_account_access"`
 	CustomField                      map[string]interface{}        `json:"custom_field"`
 	Consents                         map[string]interface{}        `json:"consents"`
 	Object                           string                        `json:"object"`
@@ -131,22 +125,6 @@ type Relationship struct {
 	InvoiceOwnerId string `json:"invoice_owner_id"`
 	Object         string `json:"object"`
 }
-type ParentAccountAccess struct {
-	PortalEditChildSubscriptions customerEnum.ParentAccountAccessPortalEditChildSubscriptions `json:"portal_edit_child_subscriptions"`
-	PortalDownloadChildInvoices  customerEnum.ParentAccountAccessPortalDownloadChildInvoices  `json:"portal_download_child_invoices"`
-	SendSubscriptionEmails       bool                                                         `json:"send_subscription_emails"`
-	SendInvoiceEmails            bool                                                         `json:"send_invoice_emails"`
-	SendPaymentEmails            bool                                                         `json:"send_payment_emails"`
-	Object                       string                                                       `json:"object"`
-}
-type ChildAccountAccess struct {
-	PortalEditSubscriptions customerEnum.ChildAccountAccessPortalEditSubscriptions `json:"portal_edit_subscriptions"`
-	PortalDownloadInvoices  customerEnum.ChildAccountAccessPortalDownloadInvoices  `json:"portal_download_invoices"`
-	SendSubscriptionEmails  bool                                                   `json:"send_subscription_emails"`
-	SendInvoiceEmails       bool                                                   `json:"send_invoice_emails"`
-	SendPaymentEmails       bool                                                   `json:"send_payment_emails"`
-	Object                  string                                                 `json:"object"`
-}
 type CreateRequestParams struct {
 	Id                               string                       `json:"id,omitempty"`
 	FirstName                        string                       `json:"first_name,omitempty"`
@@ -170,8 +148,6 @@ type CreateRequestParams struct {
 	EntityCode                       enum.EntityCode              `json:"entity_code,omitempty"`
 	ExemptNumber                     string                       `json:"exempt_number,omitempty"`
 	MetaData                         map[string]interface{}       `json:"meta_data,omitempty"`
-	OfflinePaymentMethod             enum.OfflinePaymentMethod    `json:"offline_payment_method,omitempty"`
-	AutoCloseInvoices                *bool                        `json:"auto_close_invoices,omitempty"`
 	ConsolidatedInvoicing            *bool                        `json:"consolidated_invoicing,omitempty"`
 	Card                             *CreateCardParams            `json:"card,omitempty"`
 	BankAccount                      *CreateBankAccountParams     `json:"bank_account,omitempty"`
@@ -227,12 +203,11 @@ type CreatePaymentMethodParams struct {
 	IssuingCountry   string       `json:"issuing_country,omitempty"`
 }
 type CreatePaymentIntentParams struct {
-	Id                string                 `json:"id,omitempty"`
-	GatewayAccountId  string                 `json:"gateway_account_id,omitempty"`
-	GwToken           string                 `json:"gw_token,omitempty"`
-	ReferenceId       string                 `json:"reference_id,omitempty"`
-	GwPaymentMethodId string                 `json:"gw_payment_method_id,omitempty"`
-	AdditionalInfo    map[string]interface{} `json:"additional_info,omitempty"`
+	Id                string `json:"id,omitempty"`
+	GatewayAccountId  string `json:"gateway_account_id,omitempty"`
+	GwToken           string `json:"gw_token,omitempty"`
+	ReferenceId       string `json:"reference_id,omitempty"`
+	GwPaymentMethodId string `json:"gw_payment_method_id,omitempty"`
 }
 type CreateBillingAddressParams struct {
 	FirstName        string                `json:"first_name,omitempty"`
@@ -251,23 +226,21 @@ type CreateBillingAddressParams struct {
 	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
 }
 type ListRequestParams struct {
-	Limit                *int32                  `json:"limit,omitempty"`
-	Offset               string                  `json:"offset,omitempty"`
-	IncludeDeleted       *bool                   `json:"include_deleted,omitempty"`
-	Id                   *filter.StringFilter    `json:"id,omitempty"`
-	FirstName            *filter.StringFilter    `json:"first_name,omitempty"`
-	LastName             *filter.StringFilter    `json:"last_name,omitempty"`
-	Email                *filter.StringFilter    `json:"email,omitempty"`
-	Company              *filter.StringFilter    `json:"company,omitempty"`
-	Phone                *filter.StringFilter    `json:"phone,omitempty"`
-	AutoCollection       *filter.EnumFilter      `json:"auto_collection,omitempty"`
-	Taxability           *filter.EnumFilter      `json:"taxability,omitempty"`
-	CreatedAt            *filter.TimestampFilter `json:"created_at,omitempty"`
-	UpdatedAt            *filter.TimestampFilter `json:"updated_at,omitempty"`
-	Relationship         *ListRelationshipParams `json:"relationship,omitempty"`
-	OfflinePaymentMethod *filter.EnumFilter      `json:"offline_payment_method,omitempty"`
-	AutoCloseInvoices    *filter.BooleanFilter   `json:"auto_close_invoices,omitempty"`
-	SortBy               *filter.SortFilter      `json:"sort_by,omitempty"`
+	Limit          *int32                  `json:"limit,omitempty"`
+	Offset         string                  `json:"offset,omitempty"`
+	IncludeDeleted *bool                   `json:"include_deleted,omitempty"`
+	Id             *filter.StringFilter    `json:"id,omitempty"`
+	FirstName      *filter.StringFilter    `json:"first_name,omitempty"`
+	LastName       *filter.StringFilter    `json:"last_name,omitempty"`
+	Email          *filter.StringFilter    `json:"email,omitempty"`
+	Company        *filter.StringFilter    `json:"company,omitempty"`
+	Phone          *filter.StringFilter    `json:"phone,omitempty"`
+	AutoCollection *filter.EnumFilter      `json:"auto_collection,omitempty"`
+	Taxability     *filter.EnumFilter      `json:"taxability,omitempty"`
+	CreatedAt      *filter.TimestampFilter `json:"created_at,omitempty"`
+	UpdatedAt      *filter.TimestampFilter `json:"updated_at,omitempty"`
+	Relationship   *ListRelationshipParams `json:"relationship,omitempty"`
+	SortBy         *filter.SortFilter      `json:"sort_by,omitempty"`
 }
 type ListRelationshipParams struct {
 	ParentId       *filter.StringFilter `json:"parent_id,omitempty"`
@@ -292,9 +265,7 @@ type UpdateRequestParams struct {
 	Locale                  string                       `json:"locale,omitempty"`
 	EntityCode              enum.EntityCode              `json:"entity_code,omitempty"`
 	ExemptNumber            string                       `json:"exempt_number,omitempty"`
-	OfflinePaymentMethod    enum.OfflinePaymentMethod    `json:"offline_payment_method,omitempty"`
 	InvoiceNotes            string                       `json:"invoice_notes,omitempty"`
-	AutoCloseInvoices       *bool                        `json:"auto_close_invoices,omitempty"`
 	MetaData                map[string]interface{}       `json:"meta_data,omitempty"`
 	FraudFlag               customerEnum.FraudFlag       `json:"fraud_flag,omitempty"`
 	ConsolidatedInvoicing   *bool                        `json:"consolidated_invoicing,omitempty"`
@@ -418,7 +389,7 @@ type CollectPaymentRequestParams struct {
 	RetainPaymentSource         *bool                                    `json:"retain_payment_source,omitempty"`
 }
 type CollectPaymentInvoiceAllocationParams struct {
-	InvoiceId        string `json:"invoice_id"`
+	InvoiceId        string `json:"invoice_id,omitempty"`
 	AllocationAmount *int32 `json:"allocation_amount,omitempty"`
 }
 type CollectPaymentPaymentMethodParams struct {
@@ -444,12 +415,11 @@ type CollectPaymentCardParams struct {
 	BillingCountry   string `json:"billing_country,omitempty"`
 }
 type CollectPaymentPaymentIntentParams struct {
-	Id                string                 `json:"id,omitempty"`
-	GatewayAccountId  string                 `json:"gateway_account_id,omitempty"`
-	GwToken           string                 `json:"gw_token,omitempty"`
-	GwPaymentMethodId string                 `json:"gw_payment_method_id,omitempty"`
-	ReferenceId       string                 `json:"reference_id,omitempty"`
-	AdditionalInfo    map[string]interface{} `json:"additional_info,omitempty"`
+	Id                string `json:"id,omitempty"`
+	GatewayAccountId  string `json:"gateway_account_id,omitempty"`
+	GwToken           string `json:"gw_token,omitempty"`
+	GwPaymentMethodId string `json:"gw_payment_method_id,omitempty"`
+	ReferenceId       string `json:"reference_id,omitempty"`
 }
 type DeleteRequestParams struct {
 	DeletePaymentMethod *bool `json:"delete_payment_method,omitempty"`
@@ -469,46 +439,10 @@ type MergeRequestParams struct {
 	ToCustomerId   string `json:"to_customer_id"`
 }
 type RelationshipsRequestParams struct {
-	ParentId                    string                                  `json:"parent_id,omitempty"`
-	PaymentOwnerId              string                                  `json:"payment_owner_id,omitempty"`
-	InvoiceOwnerId              string                                  `json:"invoice_owner_id,omitempty"`
-	UseDefaultHierarchySettings *bool                                   `json:"use_default_hierarchy_settings,omitempty"`
-	ParentAccountAccess         *RelationshipsParentAccountAccessParams `json:"parent_account_access,omitempty"`
-	ChildAccountAccess          *RelationshipsChildAccountAccessParams  `json:"child_account_access,omitempty"`
-}
-type RelationshipsParentAccountAccessParams struct {
-	PortalEditChildSubscriptions customerEnum.ParentAccountAccessPortalEditChildSubscriptions `json:"portal_edit_child_subscriptions,omitempty"`
-	PortalDownloadChildInvoices  customerEnum.ParentAccountAccessPortalDownloadChildInvoices  `json:"portal_download_child_invoices,omitempty"`
-	SendSubscriptionEmails       *bool                                                        `json:"send_subscription_emails,omitempty"`
-	SendPaymentEmails            *bool                                                        `json:"send_payment_emails,omitempty"`
-	SendInvoiceEmails            *bool                                                        `json:"send_invoice_emails,omitempty"`
-}
-type RelationshipsChildAccountAccessParams struct {
-	PortalEditSubscriptions customerEnum.ChildAccountAccessPortalEditSubscriptions `json:"portal_edit_subscriptions,omitempty"`
-	PortalDownloadInvoices  customerEnum.ChildAccountAccessPortalDownloadInvoices  `json:"portal_download_invoices,omitempty"`
-	SendSubscriptionEmails  *bool                                                  `json:"send_subscription_emails,omitempty"`
-	SendPaymentEmails       *bool                                                  `json:"send_payment_emails,omitempty"`
-	SendInvoiceEmails       *bool                                                  `json:"send_invoice_emails,omitempty"`
+	ParentId       string `json:"parent_id,omitempty"`
+	PaymentOwnerId string `json:"payment_owner_id,omitempty"`
+	InvoiceOwnerId string `json:"invoice_owner_id,omitempty"`
 }
 type HierarchyRequestParams struct {
 	HierarchyOperationType enum.HierarchyOperationType `json:"hierarchy_operation_type,omitempty"`
-}
-type UpdateHierarchySettingsRequestParams struct {
-	UseDefaultHierarchySettings *bool                                             `json:"use_default_hierarchy_settings,omitempty"`
-	ParentAccountAccess         *UpdateHierarchySettingsParentAccountAccessParams `json:"parent_account_access,omitempty"`
-	ChildAccountAccess          *UpdateHierarchySettingsChildAccountAccessParams  `json:"child_account_access,omitempty"`
-}
-type UpdateHierarchySettingsParentAccountAccessParams struct {
-	PortalEditChildSubscriptions customerEnum.ParentAccountAccessPortalEditChildSubscriptions `json:"portal_edit_child_subscriptions,omitempty"`
-	PortalDownloadChildInvoices  customerEnum.ParentAccountAccessPortalDownloadChildInvoices  `json:"portal_download_child_invoices,omitempty"`
-	SendSubscriptionEmails       *bool                                                        `json:"send_subscription_emails,omitempty"`
-	SendPaymentEmails            *bool                                                        `json:"send_payment_emails,omitempty"`
-	SendInvoiceEmails            *bool                                                        `json:"send_invoice_emails,omitempty"`
-}
-type UpdateHierarchySettingsChildAccountAccessParams struct {
-	PortalEditSubscriptions customerEnum.ChildAccountAccessPortalEditSubscriptions `json:"portal_edit_subscriptions,omitempty"`
-	PortalDownloadInvoices  customerEnum.ChildAccountAccessPortalDownloadInvoices  `json:"portal_download_invoices,omitempty"`
-	SendSubscriptionEmails  *bool                                                  `json:"send_subscription_emails,omitempty"`
-	SendPaymentEmails       *bool                                                  `json:"send_payment_emails,omitempty"`
-	SendInvoiceEmails       *bool                                                  `json:"send_invoice_emails,omitempty"`
 }
