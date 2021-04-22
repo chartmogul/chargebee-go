@@ -2,43 +2,49 @@ package quote
 
 import (
 	"encoding/json"
+
 	"github.com/chargebee/chargebee-go/enum"
 	"github.com/chargebee/chargebee-go/filter"
+	contractTermEnum "github.com/chargebee/chargebee-go/models/contractterm/enum"
 	quoteEnum "github.com/chargebee/chargebee-go/models/quote/enum"
 )
 
 type Quote struct {
-	Id                 string                  `json:"id"`
-	Name               string                  `json:"name"`
-	PoNumber           string                  `json:"po_number"`
-	CustomerId         string                  `json:"customer_id"`
-	SubscriptionId     string                  `json:"subscription_id"`
-	InvoiceId          string                  `json:"invoice_id"`
-	Status             quoteEnum.Status        `json:"status"`
-	OperationType      quoteEnum.OperationType `json:"operation_type"`
-	VatNumber          string                  `json:"vat_number"`
-	PriceType          enum.PriceType          `json:"price_type"`
-	ValidTill          int64                   `json:"valid_till"`
-	Date               int64                   `json:"date"`
-	SubTotal           int32                   `json:"sub_total"`
-	Total              int32                   `json:"total"`
-	CreditsApplied     int32                   `json:"credits_applied"`
-	AmountPaid         int32                   `json:"amount_paid"`
-	AmountDue          int32                   `json:"amount_due"`
-	TotalPayable       int64                   `json:"total_payable"`
-	ChargeOnAcceptance int32                   `json:"charge_on_acceptance"`
-	ResourceVersion    int64                   `json:"resource_version"`
-	UpdatedAt          int64                   `json:"updated_at"`
-	CurrencyCode       string                  `json:"currency_code"`
-	LineItems          []*LineItem             `json:"line_items"`
-	Discounts          []*Discount             `json:"discounts"`
-	LineItemDiscounts  []*LineItemDiscount     `json:"line_item_discounts"`
-	Taxes              []*Tax                  `json:"taxes"`
-	LineItemTaxes      []*LineItemTax          `json:"line_item_taxes"`
-	Notes              json.RawMessage         `json:"notes"`
-	ShippingAddress    *ShippingAddress        `json:"shipping_address"`
-	BillingAddress     *BillingAddress         `json:"billing_address"`
-	Object             string                  `json:"object"`
+	Id                         string                  `json:"id"`
+	Name                       string                  `json:"name"`
+	PoNumber                   string                  `json:"po_number"`
+	CustomerId                 string                  `json:"customer_id"`
+	SubscriptionId             string                  `json:"subscription_id"`
+	InvoiceId                  string                  `json:"invoice_id"`
+	Status                     quoteEnum.Status        `json:"status"`
+	OperationType              quoteEnum.OperationType `json:"operation_type"`
+	VatNumber                  string                  `json:"vat_number"`
+	PriceType                  enum.PriceType          `json:"price_type"`
+	ValidTill                  int64                   `json:"valid_till"`
+	Date                       int64                   `json:"date"`
+	TotalPayable               int64                   `json:"total_payable"`
+	ChargeOnAcceptance         int32                   `json:"charge_on_acceptance"`
+	SubTotal                   int32                   `json:"sub_total"`
+	Total                      int32                   `json:"total"`
+	CreditsApplied             int32                   `json:"credits_applied"`
+	AmountPaid                 int32                   `json:"amount_paid"`
+	AmountDue                  int32                   `json:"amount_due"`
+	Version                    int32                   `json:"version"`
+	ResourceVersion            int64                   `json:"resource_version"`
+	UpdatedAt                  int64                   `json:"updated_at"`
+	LineItems                  []*LineItem             `json:"line_items"`
+	Discounts                  []*Discount             `json:"discounts"`
+	LineItemDiscounts          []*LineItemDiscount     `json:"line_item_discounts"`
+	Taxes                      []*Tax                  `json:"taxes"`
+	LineItemTaxes              []*LineItemTax          `json:"line_item_taxes"`
+	CurrencyCode               string                  `json:"currency_code"`
+	Notes                      json.RawMessage         `json:"notes"`
+	ShippingAddress            *ShippingAddress        `json:"shipping_address"`
+	BillingAddress             *BillingAddress         `json:"billing_address"`
+	ContractTermStart          int64                   `json:"contract_term_start"`
+	ContractTermEnd            int64                   `json:"contract_term_end"`
+	ContractTermTerminationFee int32                   `json:"contract_term_termination_fee"`
+	Object                     string                  `json:"object"`
 }
 type LineItem struct {
 	Id                      string                       `json:"id"`
@@ -52,9 +58,13 @@ type LineItem struct {
 	IsTaxed                 bool                         `json:"is_taxed"`
 	TaxAmount               int32                        `json:"tax_amount"`
 	TaxRate                 float64                      `json:"tax_rate"`
+	UnitAmountInDecimal     string                       `json:"unit_amount_in_decimal"`
+	QuantityInDecimal       string                       `json:"quantity_in_decimal"`
+	AmountInDecimal         string                       `json:"amount_in_decimal"`
 	DiscountAmount          int32                        `json:"discount_amount"`
 	ItemLevelDiscountAmount int32                        `json:"item_level_discount_amount"`
 	Description             string                       `json:"description"`
+	EntityDescription       string                       `json:"entity_description"`
 	EntityType              quoteEnum.LineItemEntityType `json:"entity_type"`
 	TaxExemptReason         enum.TaxExemptReason         `json:"tax_exempt_reason"`
 	EntityId                string                       `json:"entity_id"`
@@ -138,32 +148,41 @@ type CreateSubForCustomerQuoteRequestParams struct {
 	BillingCycles           *int32                                            `json:"billing_cycles,omitempty"`
 	Addons                  []*CreateSubForCustomerQuoteAddonParams           `json:"addons,omitempty"`
 	EventBasedAddons        []*CreateSubForCustomerQuoteEventBasedAddonParams `json:"event_based_addons,omitempty"`
+	MandatoryAddonsToRemove []string                                          `json:"mandatory_addons_to_remove,omitempty"`
 	TermsToCharge           *int32                                            `json:"terms_to_charge,omitempty"`
 	BillingAlignmentMode    enum.BillingAlignmentMode                         `json:"billing_alignment_mode,omitempty"`
-	MandatoryAddonsToRemove []string                                          `json:"mandatory_addons_to_remove,omitempty"`
 	ShippingAddress         *CreateSubForCustomerQuoteShippingAddressParams   `json:"shipping_address,omitempty"`
+	ContractTerm            *CreateSubForCustomerQuoteContractTermParams      `json:"contract_term,omitempty"`
 	CouponIds               []string                                          `json:"coupon_ids,omitempty"`
 }
 type CreateSubForCustomerQuoteSubscriptionParams struct {
-	Id            string `json:"id,omitempty"`
-	PlanId        string `json:"plan_id"`
-	PlanQuantity  *int32 `json:"plan_quantity,omitempty"`
-	PlanUnitPrice *int32 `json:"plan_unit_price,omitempty"`
-	SetupFee      *int32 `json:"setup_fee,omitempty"`
-	StartDate     *int64 `json:"start_date,omitempty"`
-	TrialEnd      *int64 `json:"trial_end,omitempty"`
+	Id                                string                    `json:"id,omitempty"`
+	PlanUnitPriceInDecimal            string                    `json:"plan_unit_price_in_decimal,omitempty"`
+	PlanQuantityInDecimal             string                    `json:"plan_quantity_in_decimal,omitempty"`
+	PlanId                            string                    `json:"plan_id"`
+	PlanQuantity                      *int32                    `json:"plan_quantity,omitempty"`
+	PlanUnitPrice                     *int32                    `json:"plan_unit_price,omitempty"`
+	SetupFee                          *int32                    `json:"setup_fee,omitempty"`
+	TrialEnd                          *int64                    `json:"trial_end,omitempty"`
+	StartDate                         *int64                    `json:"start_date,omitempty"`
+	OfflinePaymentMethod              enum.OfflinePaymentMethod `json:"offline_payment_method,omitempty"`
+	ContractTermBillingCycleOnRenewal *int32                    `json:"contract_term_billing_cycle_on_renewal,omitempty"`
 }
 type CreateSubForCustomerQuoteAddonParams struct {
-	Id            string `json:"id,omitempty"`
-	Quantity      *int32 `json:"quantity,omitempty"`
-	UnitPrice     *int32 `json:"unit_price,omitempty"`
-	BillingCycles *int32 `json:"billing_cycles,omitempty"`
-	TrialEnd      *int64 `json:"trial_end,omitempty"`
+	Id                 string `json:"id,omitempty"`
+	Quantity           *int32 `json:"quantity,omitempty"`
+	QuantityInDecimal  string `json:"quantity_in_decimal,omitempty"`
+	UnitPrice          *int32 `json:"unit_price,omitempty"`
+	UnitPriceInDecimal string `json:"unit_price_in_decimal,omitempty"`
+	BillingCycles      *int32 `json:"billing_cycles,omitempty"`
+	TrialEnd           *int64 `json:"trial_end,omitempty"`
 }
 type CreateSubForCustomerQuoteEventBasedAddonParams struct {
 	Id                  string        `json:"id,omitempty"`
 	Quantity            *int32        `json:"quantity,omitempty"`
 	UnitPrice           *int32        `json:"unit_price,omitempty"`
+	QuantityInDecimal   string        `json:"quantity_in_decimal,omitempty"`
+	UnitPriceInDecimal  string        `json:"unit_price_in_decimal,omitempty"`
 	ServicePeriodInDays *int32        `json:"service_period_in_days,omitempty"`
 	OnEvent             enum.OnEvent  `json:"on_event,omitempty"`
 	ChargeOnce          *bool         `json:"charge_once,omitempty"`
@@ -185,16 +204,142 @@ type CreateSubForCustomerQuoteShippingAddressParams struct {
 	Country          string                `json:"country,omitempty"`
 	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
 }
+type CreateSubForCustomerQuoteContractTermParams struct {
+	ActionAtTermEnd          contractTermEnum.ActionAtTermEnd `json:"action_at_term_end,omitempty"`
+	CancellationCutoffPeriod *int32                           `json:"cancellation_cutoff_period,omitempty"`
+}
+type EditCreateSubForCustomerQuoteRequestParams struct {
+	Notes                   string                                                `json:"notes,omitempty"`
+	ExpiresAt               *int64                                                `json:"expires_at,omitempty"`
+	Subscription            *EditCreateSubForCustomerQuoteSubscriptionParams      `json:"subscription,omitempty"`
+	BillingCycles           *int32                                                `json:"billing_cycles,omitempty"`
+	Addons                  []*EditCreateSubForCustomerQuoteAddonParams           `json:"addons,omitempty"`
+	EventBasedAddons        []*EditCreateSubForCustomerQuoteEventBasedAddonParams `json:"event_based_addons,omitempty"`
+	MandatoryAddonsToRemove []string                                              `json:"mandatory_addons_to_remove,omitempty"`
+	TermsToCharge           *int32                                                `json:"terms_to_charge,omitempty"`
+	BillingAlignmentMode    enum.BillingAlignmentMode                             `json:"billing_alignment_mode,omitempty"`
+	ShippingAddress         *EditCreateSubForCustomerQuoteShippingAddressParams   `json:"shipping_address,omitempty"`
+	ContractTerm            *EditCreateSubForCustomerQuoteContractTermParams      `json:"contract_term,omitempty"`
+	CouponIds               []string                                              `json:"coupon_ids,omitempty"`
+}
+type EditCreateSubForCustomerQuoteSubscriptionParams struct {
+	Id                                string                    `json:"id,omitempty"`
+	PlanUnitPriceInDecimal            string                    `json:"plan_unit_price_in_decimal,omitempty"`
+	PlanQuantityInDecimal             string                    `json:"plan_quantity_in_decimal,omitempty"`
+	PlanId                            string                    `json:"plan_id"`
+	PlanQuantity                      *int32                    `json:"plan_quantity,omitempty"`
+	PlanUnitPrice                     *int32                    `json:"plan_unit_price,omitempty"`
+	SetupFee                          *int32                    `json:"setup_fee,omitempty"`
+	TrialEnd                          *int64                    `json:"trial_end,omitempty"`
+	StartDate                         *int64                    `json:"start_date,omitempty"`
+	OfflinePaymentMethod              enum.OfflinePaymentMethod `json:"offline_payment_method,omitempty"`
+	ContractTermBillingCycleOnRenewal *int32                    `json:"contract_term_billing_cycle_on_renewal,omitempty"`
+}
+type EditCreateSubForCustomerQuoteAddonParams struct {
+	Id                 string `json:"id,omitempty"`
+	Quantity           *int32 `json:"quantity,omitempty"`
+	QuantityInDecimal  string `json:"quantity_in_decimal,omitempty"`
+	UnitPrice          *int32 `json:"unit_price,omitempty"`
+	UnitPriceInDecimal string `json:"unit_price_in_decimal,omitempty"`
+	BillingCycles      *int32 `json:"billing_cycles,omitempty"`
+	TrialEnd           *int64 `json:"trial_end,omitempty"`
+}
+type EditCreateSubForCustomerQuoteEventBasedAddonParams struct {
+	Id                  string        `json:"id,omitempty"`
+	Quantity            *int32        `json:"quantity,omitempty"`
+	UnitPrice           *int32        `json:"unit_price,omitempty"`
+	QuantityInDecimal   string        `json:"quantity_in_decimal,omitempty"`
+	UnitPriceInDecimal  string        `json:"unit_price_in_decimal,omitempty"`
+	ServicePeriodInDays *int32        `json:"service_period_in_days,omitempty"`
+	OnEvent             enum.OnEvent  `json:"on_event,omitempty"`
+	ChargeOnce          *bool         `json:"charge_once,omitempty"`
+	ChargeOn            enum.ChargeOn `json:"charge_on,omitempty"`
+}
+type EditCreateSubForCustomerQuoteShippingAddressParams struct {
+	FirstName        string                `json:"first_name,omitempty"`
+	LastName         string                `json:"last_name,omitempty"`
+	Email            string                `json:"email,omitempty"`
+	Company          string                `json:"company,omitempty"`
+	Phone            string                `json:"phone,omitempty"`
+	Line1            string                `json:"line1,omitempty"`
+	Line2            string                `json:"line2,omitempty"`
+	Line3            string                `json:"line3,omitempty"`
+	City             string                `json:"city,omitempty"`
+	StateCode        string                `json:"state_code,omitempty"`
+	State            string                `json:"state,omitempty"`
+	Zip              string                `json:"zip,omitempty"`
+	Country          string                `json:"country,omitempty"`
+	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
+}
+type EditCreateSubForCustomerQuoteContractTermParams struct {
+	ActionAtTermEnd          contractTermEnum.ActionAtTermEnd `json:"action_at_term_end,omitempty"`
+	CancellationCutoffPeriod *int32                           `json:"cancellation_cutoff_period,omitempty"`
+}
+type CreateSubItemsForCustomerQuoteRequestParams struct {
+	Name                   string                                                  `json:"name,omitempty"`
+	Notes                  string                                                  `json:"notes,omitempty"`
+	ExpiresAt              *int64                                                  `json:"expires_at,omitempty"`
+	Subscription           *CreateSubItemsForCustomerQuoteSubscriptionParams       `json:"subscription,omitempty"`
+	BillingCycles          *int32                                                  `json:"billing_cycles,omitempty"`
+	SubscriptionItems      []*CreateSubItemsForCustomerQuoteSubscriptionItemParams `json:"subscription_items,omitempty"`
+	MandatoryItemsToRemove []string                                                `json:"mandatory_items_to_remove,omitempty"`
+	ItemTiers              []*CreateSubItemsForCustomerQuoteItemTierParams         `json:"item_tiers,omitempty"`
+	TermsToCharge          *int32                                                  `json:"terms_to_charge,omitempty"`
+	BillingAlignmentMode   enum.BillingAlignmentMode                               `json:"billing_alignment_mode,omitempty"`
+	ShippingAddress        *CreateSubItemsForCustomerQuoteShippingAddressParams    `json:"shipping_address,omitempty"`
+	CouponIds              []string                                                `json:"coupon_ids,omitempty"`
+}
+type CreateSubItemsForCustomerQuoteSubscriptionParams struct {
+	Id                   string                    `json:"id,omitempty"`
+	TrialEnd             *int64                    `json:"trial_end,omitempty"`
+	SetupFee             *int32                    `json:"setup_fee,omitempty"`
+	StartDate            *int64                    `json:"start_date,omitempty"`
+	OfflinePaymentMethod enum.OfflinePaymentMethod `json:"offline_payment_method,omitempty"`
+}
+type CreateSubItemsForCustomerQuoteSubscriptionItemParams struct {
+	ItemPriceId       string              `json:"item_price_id"`
+	Quantity          *int32              `json:"quantity,omitempty"`
+	UnitPrice         *int32              `json:"unit_price,omitempty"`
+	BillingCycles     *int32              `json:"billing_cycles,omitempty"`
+	TrialEnd          *int64              `json:"trial_end,omitempty"`
+	ServicePeriodDays *int32              `json:"service_period_days,omitempty"`
+	ChargeOnEvent     enum.ChargeOnEvent  `json:"charge_on_event,omitempty"`
+	ChargeOnce        *bool               `json:"charge_once,omitempty"`
+	ItemType          enum.ItemType       `json:"item_type,omitempty"`
+	ChargeOnOption    enum.ChargeOnOption `json:"charge_on_option,omitempty"`
+}
+type CreateSubItemsForCustomerQuoteItemTierParams struct {
+	ItemPriceId  string `json:"item_price_id,omitempty"`
+	StartingUnit *int32 `json:"starting_unit,omitempty"`
+	EndingUnit   *int32 `json:"ending_unit,omitempty"`
+	Price        *int32 `json:"price,omitempty"`
+}
+type CreateSubItemsForCustomerQuoteShippingAddressParams struct {
+	FirstName        string                `json:"first_name,omitempty"`
+	LastName         string                `json:"last_name,omitempty"`
+	Email            string                `json:"email,omitempty"`
+	Company          string                `json:"company,omitempty"`
+	Phone            string                `json:"phone,omitempty"`
+	Line1            string                `json:"line1,omitempty"`
+	Line2            string                `json:"line2,omitempty"`
+	Line3            string                `json:"line3,omitempty"`
+	City             string                `json:"city,omitempty"`
+	StateCode        string                `json:"state_code,omitempty"`
+	State            string                `json:"state,omitempty"`
+	Zip              string                `json:"zip,omitempty"`
+	Country          string                `json:"country,omitempty"`
+	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
+}
 type UpdateSubscriptionQuoteRequestParams struct {
 	Name                    string                                          `json:"name,omitempty"`
 	Notes                   string                                          `json:"notes,omitempty"`
 	ExpiresAt               *int64                                          `json:"expires_at,omitempty"`
 	Subscription            *UpdateSubscriptionQuoteSubscriptionParams      `json:"subscription,omitempty"`
-	BillingCycles           *int32                                          `json:"billing_cycles,omitempty"`
 	Addons                  []*UpdateSubscriptionQuoteAddonParams           `json:"addons,omitempty"`
 	EventBasedAddons        []*UpdateSubscriptionQuoteEventBasedAddonParams `json:"event_based_addons,omitempty"`
 	ReplaceAddonList        *bool                                           `json:"replace_addon_list,omitempty"`
 	MandatoryAddonsToRemove []string                                        `json:"mandatory_addons_to_remove,omitempty"`
+	BillingCycles           *int32                                          `json:"billing_cycles,omitempty"`
 	TermsToCharge           *int32                                          `json:"terms_to_charge,omitempty"`
 	ReactivateFrom          *int64                                          `json:"reactivate_from,omitempty"`
 	BillingAlignmentMode    enum.BillingAlignmentMode                       `json:"billing_alignment_mode,omitempty"`
@@ -205,23 +350,31 @@ type UpdateSubscriptionQuoteRequestParams struct {
 	BillingAddress          *UpdateSubscriptionQuoteBillingAddressParams    `json:"billing_address,omitempty"`
 	ShippingAddress         *UpdateSubscriptionQuoteShippingAddressParams   `json:"shipping_address,omitempty"`
 	Customer                *UpdateSubscriptionQuoteCustomerParams          `json:"customer,omitempty"`
+	ContractTerm            *UpdateSubscriptionQuoteContractTermParams      `json:"contract_term,omitempty"`
 }
 type UpdateSubscriptionQuoteSubscriptionParams struct {
-	Id            string `json:"id"`
-	PlanId        string `json:"plan_id,omitempty"`
-	PlanQuantity  *int32 `json:"plan_quantity,omitempty"`
-	PlanUnitPrice *int32 `json:"plan_unit_price,omitempty"`
-	SetupFee      *int32 `json:"setup_fee,omitempty"`
-	StartDate     *int64 `json:"start_date,omitempty"`
-	TrialEnd      *int64 `json:"trial_end,omitempty"`
-	Coupon        string `json:"coupon,omitempty"`
+	Id                                string                    `json:"id"`
+	PlanId                            string                    `json:"plan_id,omitempty"`
+	PlanQuantity                      *int32                    `json:"plan_quantity,omitempty"`
+	PlanUnitPrice                     *int32                    `json:"plan_unit_price,omitempty"`
+	SetupFee                          *int32                    `json:"setup_fee,omitempty"`
+	PlanQuantityInDecimal             string                    `json:"plan_quantity_in_decimal,omitempty"`
+	PlanUnitPriceInDecimal            string                    `json:"plan_unit_price_in_decimal,omitempty"`
+	StartDate                         *int64                    `json:"start_date,omitempty"`
+	TrialEnd                          *int64                    `json:"trial_end,omitempty"`
+	Coupon                            string                    `json:"coupon,omitempty"`
+	AutoCollection                    enum.AutoCollection       `json:"auto_collection,omitempty"`
+	OfflinePaymentMethod              enum.OfflinePaymentMethod `json:"offline_payment_method,omitempty"`
+	ContractTermBillingCycleOnRenewal *int32                    `json:"contract_term_billing_cycle_on_renewal,omitempty"`
 }
 type UpdateSubscriptionQuoteAddonParams struct {
-	Id            string `json:"id,omitempty"`
-	Quantity      *int32 `json:"quantity,omitempty"`
-	UnitPrice     *int32 `json:"unit_price,omitempty"`
-	BillingCycles *int32 `json:"billing_cycles,omitempty"`
-	TrialEnd      *int64 `json:"trial_end,omitempty"`
+	Id                 string `json:"id,omitempty"`
+	Quantity           *int32 `json:"quantity,omitempty"`
+	UnitPrice          *int32 `json:"unit_price,omitempty"`
+	BillingCycles      *int32 `json:"billing_cycles,omitempty"`
+	QuantityInDecimal  string `json:"quantity_in_decimal,omitempty"`
+	UnitPriceInDecimal string `json:"unit_price_in_decimal,omitempty"`
+	TrialEnd           *int64 `json:"trial_end,omitempty"`
 }
 type UpdateSubscriptionQuoteEventBasedAddonParams struct {
 	Id                  string        `json:"id,omitempty"`
@@ -231,6 +384,8 @@ type UpdateSubscriptionQuoteEventBasedAddonParams struct {
 	ChargeOn            enum.ChargeOn `json:"charge_on,omitempty"`
 	OnEvent             enum.OnEvent  `json:"on_event,omitempty"`
 	ChargeOnce          *bool         `json:"charge_once,omitempty"`
+	QuantityInDecimal   string        `json:"quantity_in_decimal,omitempty"`
+	UnitPriceInDecimal  string        `json:"unit_price_in_decimal,omitempty"`
 }
 type UpdateSubscriptionQuoteBillingAddressParams struct {
 	FirstName        string                `json:"first_name,omitempty"`
@@ -268,10 +423,193 @@ type UpdateSubscriptionQuoteCustomerParams struct {
 	VatNumber        string `json:"vat_number,omitempty"`
 	RegisteredForGst *bool  `json:"registered_for_gst,omitempty"`
 }
+type UpdateSubscriptionQuoteContractTermParams struct {
+	ActionAtTermEnd          contractTermEnum.ActionAtTermEnd `json:"action_at_term_end,omitempty"`
+	CancellationCutoffPeriod *int32                           `json:"cancellation_cutoff_period,omitempty"`
+}
+type EditUpdateSubscriptionQuoteRequestParams struct {
+	Notes                   string                                              `json:"notes,omitempty"`
+	ExpiresAt               *int64                                              `json:"expires_at,omitempty"`
+	Subscription            *EditUpdateSubscriptionQuoteSubscriptionParams      `json:"subscription,omitempty"`
+	Addons                  []*EditUpdateSubscriptionQuoteAddonParams           `json:"addons,omitempty"`
+	EventBasedAddons        []*EditUpdateSubscriptionQuoteEventBasedAddonParams `json:"event_based_addons,omitempty"`
+	ReplaceAddonList        *bool                                               `json:"replace_addon_list,omitempty"`
+	MandatoryAddonsToRemove []string                                            `json:"mandatory_addons_to_remove,omitempty"`
+	BillingCycles           *int32                                              `json:"billing_cycles,omitempty"`
+	TermsToCharge           *int32                                              `json:"terms_to_charge,omitempty"`
+	ReactivateFrom          *int64                                              `json:"reactivate_from,omitempty"`
+	BillingAlignmentMode    enum.BillingAlignmentMode                           `json:"billing_alignment_mode,omitempty"`
+	CouponIds               []string                                            `json:"coupon_ids,omitempty"`
+	ReplaceCouponList       *bool                                               `json:"replace_coupon_list,omitempty"`
+	ForceTermReset          *bool                                               `json:"force_term_reset,omitempty"`
+	Reactivate              *bool                                               `json:"reactivate,omitempty"`
+	BillingAddress          *EditUpdateSubscriptionQuoteBillingAddressParams    `json:"billing_address,omitempty"`
+	ShippingAddress         *EditUpdateSubscriptionQuoteShippingAddressParams   `json:"shipping_address,omitempty"`
+	Customer                *EditUpdateSubscriptionQuoteCustomerParams          `json:"customer,omitempty"`
+	ContractTerm            *EditUpdateSubscriptionQuoteContractTermParams      `json:"contract_term,omitempty"`
+}
+type EditUpdateSubscriptionQuoteSubscriptionParams struct {
+	PlanId                            string                    `json:"plan_id,omitempty"`
+	PlanQuantity                      *int32                    `json:"plan_quantity,omitempty"`
+	PlanUnitPrice                     *int32                    `json:"plan_unit_price,omitempty"`
+	SetupFee                          *int32                    `json:"setup_fee,omitempty"`
+	PlanQuantityInDecimal             string                    `json:"plan_quantity_in_decimal,omitempty"`
+	PlanUnitPriceInDecimal            string                    `json:"plan_unit_price_in_decimal,omitempty"`
+	StartDate                         *int64                    `json:"start_date,omitempty"`
+	TrialEnd                          *int64                    `json:"trial_end,omitempty"`
+	Coupon                            string                    `json:"coupon,omitempty"`
+	AutoCollection                    enum.AutoCollection       `json:"auto_collection,omitempty"`
+	OfflinePaymentMethod              enum.OfflinePaymentMethod `json:"offline_payment_method,omitempty"`
+	ContractTermBillingCycleOnRenewal *int32                    `json:"contract_term_billing_cycle_on_renewal,omitempty"`
+}
+type EditUpdateSubscriptionQuoteAddonParams struct {
+	Id                 string `json:"id,omitempty"`
+	Quantity           *int32 `json:"quantity,omitempty"`
+	UnitPrice          *int32 `json:"unit_price,omitempty"`
+	BillingCycles      *int32 `json:"billing_cycles,omitempty"`
+	QuantityInDecimal  string `json:"quantity_in_decimal,omitempty"`
+	UnitPriceInDecimal string `json:"unit_price_in_decimal,omitempty"`
+	TrialEnd           *int64 `json:"trial_end,omitempty"`
+}
+type EditUpdateSubscriptionQuoteEventBasedAddonParams struct {
+	Id                  string        `json:"id,omitempty"`
+	Quantity            *int32        `json:"quantity,omitempty"`
+	UnitPrice           *int32        `json:"unit_price,omitempty"`
+	ServicePeriodInDays *int32        `json:"service_period_in_days,omitempty"`
+	ChargeOn            enum.ChargeOn `json:"charge_on,omitempty"`
+	OnEvent             enum.OnEvent  `json:"on_event,omitempty"`
+	ChargeOnce          *bool         `json:"charge_once,omitempty"`
+	QuantityInDecimal   string        `json:"quantity_in_decimal,omitempty"`
+	UnitPriceInDecimal  string        `json:"unit_price_in_decimal,omitempty"`
+}
+type EditUpdateSubscriptionQuoteBillingAddressParams struct {
+	FirstName        string                `json:"first_name,omitempty"`
+	LastName         string                `json:"last_name,omitempty"`
+	Email            string                `json:"email,omitempty"`
+	Company          string                `json:"company,omitempty"`
+	Phone            string                `json:"phone,omitempty"`
+	Line1            string                `json:"line1,omitempty"`
+	Line2            string                `json:"line2,omitempty"`
+	Line3            string                `json:"line3,omitempty"`
+	City             string                `json:"city,omitempty"`
+	StateCode        string                `json:"state_code,omitempty"`
+	State            string                `json:"state,omitempty"`
+	Zip              string                `json:"zip,omitempty"`
+	Country          string                `json:"country,omitempty"`
+	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
+}
+type EditUpdateSubscriptionQuoteShippingAddressParams struct {
+	FirstName        string                `json:"first_name,omitempty"`
+	LastName         string                `json:"last_name,omitempty"`
+	Email            string                `json:"email,omitempty"`
+	Company          string                `json:"company,omitempty"`
+	Phone            string                `json:"phone,omitempty"`
+	Line1            string                `json:"line1,omitempty"`
+	Line2            string                `json:"line2,omitempty"`
+	Line3            string                `json:"line3,omitempty"`
+	City             string                `json:"city,omitempty"`
+	StateCode        string                `json:"state_code,omitempty"`
+	State            string                `json:"state,omitempty"`
+	Zip              string                `json:"zip,omitempty"`
+	Country          string                `json:"country,omitempty"`
+	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
+}
+type EditUpdateSubscriptionQuoteCustomerParams struct {
+	VatNumber        string `json:"vat_number,omitempty"`
+	RegisteredForGst *bool  `json:"registered_for_gst,omitempty"`
+}
+type EditUpdateSubscriptionQuoteContractTermParams struct {
+	ActionAtTermEnd          contractTermEnum.ActionAtTermEnd `json:"action_at_term_end,omitempty"`
+	CancellationCutoffPeriod *int32                           `json:"cancellation_cutoff_period,omitempty"`
+}
+type UpdateSubscriptionQuoteForItemsRequestParams struct {
+	Name                   string                                                   `json:"name,omitempty"`
+	Notes                  string                                                   `json:"notes,omitempty"`
+	ExpiresAt              *int64                                                   `json:"expires_at,omitempty"`
+	Subscription           *UpdateSubscriptionQuoteForItemsSubscriptionParams       `json:"subscription,omitempty"`
+	SubscriptionItems      []*UpdateSubscriptionQuoteForItemsSubscriptionItemParams `json:"subscription_items,omitempty"`
+	MandatoryItemsToRemove []string                                                 `json:"mandatory_items_to_remove,omitempty"`
+	ReplaceItemsList       *bool                                                    `json:"replace_items_list,omitempty"`
+	ItemTiers              []*UpdateSubscriptionQuoteForItemsItemTierParams         `json:"item_tiers,omitempty"`
+	BillingCycles          *int32                                                   `json:"billing_cycles,omitempty"`
+	TermsToCharge          *int32                                                   `json:"terms_to_charge,omitempty"`
+	ReactivateFrom         *int64                                                   `json:"reactivate_from,omitempty"`
+	BillingAlignmentMode   enum.BillingAlignmentMode                                `json:"billing_alignment_mode,omitempty"`
+	CouponIds              []string                                                 `json:"coupon_ids,omitempty"`
+	ReplaceCouponList      *bool                                                    `json:"replace_coupon_list,omitempty"`
+	ForceTermReset         *bool                                                    `json:"force_term_reset,omitempty"`
+	Reactivate             *bool                                                    `json:"reactivate,omitempty"`
+	BillingAddress         *UpdateSubscriptionQuoteForItemsBillingAddressParams     `json:"billing_address,omitempty"`
+	ShippingAddress        *UpdateSubscriptionQuoteForItemsShippingAddressParams    `json:"shipping_address,omitempty"`
+	Customer               *UpdateSubscriptionQuoteForItemsCustomerParams           `json:"customer,omitempty"`
+}
+type UpdateSubscriptionQuoteForItemsSubscriptionParams struct {
+	Id                   string                    `json:"id"`
+	SetupFee             *int32                    `json:"setup_fee,omitempty"`
+	StartDate            *int64                    `json:"start_date,omitempty"`
+	TrialEnd             *int64                    `json:"trial_end,omitempty"`
+	Coupon               string                    `json:"coupon,omitempty"`
+	AutoCollection       enum.AutoCollection       `json:"auto_collection,omitempty"`
+	OfflinePaymentMethod enum.OfflinePaymentMethod `json:"offline_payment_method,omitempty"`
+}
+type UpdateSubscriptionQuoteForItemsSubscriptionItemParams struct {
+	ItemPriceId       string              `json:"item_price_id"`
+	Quantity          *int32              `json:"quantity,omitempty"`
+	UnitPrice         *int32              `json:"unit_price,omitempty"`
+	BillingCycles     *int32              `json:"billing_cycles,omitempty"`
+	TrialEnd          *int64              `json:"trial_end,omitempty"`
+	ServicePeriodDays *int32              `json:"service_period_days,omitempty"`
+	ChargeOnEvent     enum.ChargeOnEvent  `json:"charge_on_event,omitempty"`
+	ChargeOnce        *bool               `json:"charge_once,omitempty"`
+	ChargeOnOption    enum.ChargeOnOption `json:"charge_on_option,omitempty"`
+	ItemType          enum.ItemType       `json:"item_type,omitempty"`
+}
+type UpdateSubscriptionQuoteForItemsItemTierParams struct {
+	ItemPriceId  string `json:"item_price_id,omitempty"`
+	StartingUnit *int32 `json:"starting_unit,omitempty"`
+	EndingUnit   *int32 `json:"ending_unit,omitempty"`
+	Price        *int32 `json:"price,omitempty"`
+}
+type UpdateSubscriptionQuoteForItemsBillingAddressParams struct {
+	FirstName        string                `json:"first_name,omitempty"`
+	LastName         string                `json:"last_name,omitempty"`
+	Email            string                `json:"email,omitempty"`
+	Company          string                `json:"company,omitempty"`
+	Phone            string                `json:"phone,omitempty"`
+	Line1            string                `json:"line1,omitempty"`
+	Line2            string                `json:"line2,omitempty"`
+	Line3            string                `json:"line3,omitempty"`
+	City             string                `json:"city,omitempty"`
+	StateCode        string                `json:"state_code,omitempty"`
+	State            string                `json:"state,omitempty"`
+	Zip              string                `json:"zip,omitempty"`
+	Country          string                `json:"country,omitempty"`
+	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
+}
+type UpdateSubscriptionQuoteForItemsShippingAddressParams struct {
+	FirstName        string                `json:"first_name,omitempty"`
+	LastName         string                `json:"last_name,omitempty"`
+	Email            string                `json:"email,omitempty"`
+	Company          string                `json:"company,omitempty"`
+	Phone            string                `json:"phone,omitempty"`
+	Line1            string                `json:"line1,omitempty"`
+	Line2            string                `json:"line2,omitempty"`
+	Line3            string                `json:"line3,omitempty"`
+	City             string                `json:"city,omitempty"`
+	StateCode        string                `json:"state_code,omitempty"`
+	State            string                `json:"state,omitempty"`
+	Zip              string                `json:"zip,omitempty"`
+	Country          string                `json:"country,omitempty"`
+	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
+}
+type UpdateSubscriptionQuoteForItemsCustomerParams struct {
+	VatNumber        string `json:"vat_number,omitempty"`
+	RegisteredForGst *bool  `json:"registered_for_gst,omitempty"`
+}
 type CreateForOnetimeChargesRequestParams struct {
+	Name            string                                        `json:"name,omitempty"`
 	CustomerId      string                                        `json:"customer_id"`
 	PoNumber        string                                        `json:"po_number,omitempty"`
-	Name            string                                        `json:"name,omitempty"`
 	Notes           string                                        `json:"notes,omitempty"`
 	ExpiresAt       *int64                                        `json:"expires_at,omitempty"`
 	CurrencyCode    string                                        `json:"currency_code,omitempty"`
@@ -281,13 +619,16 @@ type CreateForOnetimeChargesRequestParams struct {
 	ShippingAddress *CreateForOnetimeChargesShippingAddressParams `json:"shipping_address,omitempty"`
 }
 type CreateForOnetimeChargesAddonParams struct {
-	Id            string `json:"id,omitempty"`
-	Quantity      *int32 `json:"quantity,omitempty"`
-	UnitPrice     *int32 `json:"unit_price,omitempty"`
-	ServicePeriod *int32 `json:"service_period,omitempty"`
+	Id                 string `json:"id,omitempty"`
+	Quantity           *int32 `json:"quantity,omitempty"`
+	QuantityInDecimal  string `json:"quantity_in_decimal,omitempty"`
+	UnitPrice          *int32 `json:"unit_price,omitempty"`
+	UnitPriceInDecimal string `json:"unit_price_in_decimal,omitempty"`
+	ServicePeriod      *int32 `json:"service_period,omitempty"`
 }
 type CreateForOnetimeChargesChargeParams struct {
 	Amount                 *int32               `json:"amount,omitempty"`
+	AmountInDecimal        string               `json:"amount_in_decimal,omitempty"`
 	Description            string               `json:"description,omitempty"`
 	AvalaraSaleType        enum.AvalaraSaleType `json:"avalara_sale_type,omitempty"`
 	AvalaraTransactionType *int32               `json:"avalara_transaction_type,omitempty"`
@@ -295,6 +636,100 @@ type CreateForOnetimeChargesChargeParams struct {
 	ServicePeriod          *int32               `json:"service_period,omitempty"`
 }
 type CreateForOnetimeChargesShippingAddressParams struct {
+	FirstName        string                `json:"first_name,omitempty"`
+	LastName         string                `json:"last_name,omitempty"`
+	Email            string                `json:"email,omitempty"`
+	Company          string                `json:"company,omitempty"`
+	Phone            string                `json:"phone,omitempty"`
+	Line1            string                `json:"line1,omitempty"`
+	Line2            string                `json:"line2,omitempty"`
+	Line3            string                `json:"line3,omitempty"`
+	City             string                `json:"city,omitempty"`
+	StateCode        string                `json:"state_code,omitempty"`
+	State            string                `json:"state,omitempty"`
+	Zip              string                `json:"zip,omitempty"`
+	Country          string                `json:"country,omitempty"`
+	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
+}
+type CreateForChargeItemsAndChargesRequestParams struct {
+	Name            string                                               `json:"name,omitempty"`
+	CustomerId      string                                               `json:"customer_id"`
+	PoNumber        string                                               `json:"po_number,omitempty"`
+	Notes           string                                               `json:"notes,omitempty"`
+	ExpiresAt       *int64                                               `json:"expires_at,omitempty"`
+	CurrencyCode    string                                               `json:"currency_code,omitempty"`
+	ItemPrices      []*CreateForChargeItemsAndChargesItemPriceParams     `json:"item_prices,omitempty"`
+	ItemTiers       []*CreateForChargeItemsAndChargesItemTierParams      `json:"item_tiers,omitempty"`
+	Charges         []*CreateForChargeItemsAndChargesChargeParams        `json:"charges,omitempty"`
+	Coupon          string                                               `json:"coupon,omitempty"`
+	ShippingAddress *CreateForChargeItemsAndChargesShippingAddressParams `json:"shipping_address,omitempty"`
+}
+type CreateForChargeItemsAndChargesItemPriceParams struct {
+	ItemPriceId string `json:"item_price_id,omitempty"`
+	Quantity    *int32 `json:"quantity,omitempty"`
+	UnitPrice   *int32 `json:"unit_price,omitempty"`
+	DateFrom    *int64 `json:"date_from,omitempty"`
+	DateTo      *int64 `json:"date_to,omitempty"`
+}
+type CreateForChargeItemsAndChargesItemTierParams struct {
+	ItemPriceId  string `json:"item_price_id,omitempty"`
+	StartingUnit *int32 `json:"starting_unit,omitempty"`
+	EndingUnit   *int32 `json:"ending_unit,omitempty"`
+	Price        *int32 `json:"price,omitempty"`
+}
+type CreateForChargeItemsAndChargesChargeParams struct {
+	Amount                 *int32               `json:"amount,omitempty"`
+	AmountInDecimal        string               `json:"amount_in_decimal,omitempty"`
+	Description            string               `json:"description,omitempty"`
+	AvalaraSaleType        enum.AvalaraSaleType `json:"avalara_sale_type,omitempty"`
+	AvalaraTransactionType *int32               `json:"avalara_transaction_type,omitempty"`
+	AvalaraServiceType     *int32               `json:"avalara_service_type,omitempty"`
+	ServicePeriod          *int32               `json:"service_period,omitempty"`
+}
+type CreateForChargeItemsAndChargesShippingAddressParams struct {
+	FirstName        string                `json:"first_name,omitempty"`
+	LastName         string                `json:"last_name,omitempty"`
+	Email            string                `json:"email,omitempty"`
+	Company          string                `json:"company,omitempty"`
+	Phone            string                `json:"phone,omitempty"`
+	Line1            string                `json:"line1,omitempty"`
+	Line2            string                `json:"line2,omitempty"`
+	Line3            string                `json:"line3,omitempty"`
+	City             string                `json:"city,omitempty"`
+	StateCode        string                `json:"state_code,omitempty"`
+	State            string                `json:"state,omitempty"`
+	Zip              string                `json:"zip,omitempty"`
+	Country          string                `json:"country,omitempty"`
+	ValidationStatus enum.ValidationStatus `json:"validation_status,omitempty"`
+}
+type EditOneTimeQuoteRequestParams struct {
+	PoNumber        string                                 `json:"po_number,omitempty"`
+	Notes           string                                 `json:"notes,omitempty"`
+	ExpiresAt       *int64                                 `json:"expires_at,omitempty"`
+	CurrencyCode    string                                 `json:"currency_code,omitempty"`
+	Addons          []*EditOneTimeQuoteAddonParams         `json:"addons,omitempty"`
+	Charges         []*EditOneTimeQuoteChargeParams        `json:"charges,omitempty"`
+	Coupon          string                                 `json:"coupon,omitempty"`
+	ShippingAddress *EditOneTimeQuoteShippingAddressParams `json:"shipping_address,omitempty"`
+}
+type EditOneTimeQuoteAddonParams struct {
+	Id                 string `json:"id,omitempty"`
+	Quantity           *int32 `json:"quantity,omitempty"`
+	QuantityInDecimal  string `json:"quantity_in_decimal,omitempty"`
+	UnitPrice          *int32 `json:"unit_price,omitempty"`
+	UnitPriceInDecimal string `json:"unit_price_in_decimal,omitempty"`
+	ServicePeriod      *int32 `json:"service_period,omitempty"`
+}
+type EditOneTimeQuoteChargeParams struct {
+	Amount                 *int32               `json:"amount,omitempty"`
+	AmountInDecimal        string               `json:"amount_in_decimal,omitempty"`
+	Description            string               `json:"description,omitempty"`
+	AvalaraSaleType        enum.AvalaraSaleType `json:"avalara_sale_type,omitempty"`
+	AvalaraTransactionType *int32               `json:"avalara_transaction_type,omitempty"`
+	AvalaraServiceType     *int32               `json:"avalara_service_type,omitempty"`
+	ServicePeriod          *int32               `json:"service_period,omitempty"`
+}
+type EditOneTimeQuoteShippingAddressParams struct {
 	FirstName        string                `json:"first_name,omitempty"`
 	LastName         string                `json:"last_name,omitempty"`
 	Email            string                `json:"email,omitempty"`
@@ -337,6 +772,9 @@ type ConvertSubscriptionParams struct {
 type UpdateStatusRequestParams struct {
 	Status  quoteEnum.Status `json:"status"`
 	Comment string           `json:"comment,omitempty"`
+}
+type ExtendExpiryDateRequestParams struct {
+	ValidTill *int64 `json:"valid_till"`
 }
 type DeleteRequestParams struct {
 	Comment string `json:"comment,omitempty"`

@@ -2,6 +2,7 @@ package customer
 
 import (
 	"fmt"
+
 	"github.com/chargebee/chargebee-go"
 	"github.com/chargebee/chargebee-go/models/customer"
 )
@@ -77,4 +78,7 @@ func DeleteRelationship(id string) chargebee.RequestObj {
 }
 func Hierarchy(id string, params *customer.HierarchyRequestParams) chargebee.RequestObj {
 	return chargebee.Send("GET", fmt.Sprintf("/customers/%v/hierarchy", id), params)
+}
+func UpdateHierarchySettings(id string, params *customer.UpdateHierarchySettingsRequestParams) chargebee.RequestObj {
+	return chargebee.Send("POST", fmt.Sprintf("/customers/%v/update_hierarchy_settings", id), params)
 }

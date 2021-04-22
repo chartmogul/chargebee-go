@@ -14,4 +14,8 @@ const (
 	PaymentMethodTypeWechatPay             PaymentMethodType = "wechat_pay"
 	PaymentMethodTypeIdeal                 PaymentMethodType = "ideal"
 	PaymentMethodTypeGooglePay             PaymentMethodType = "google_pay"
+	PaymentMethodTypeSofort                PaymentMethodType = "sofort"
+	PaymentMethodTypeBancontact            PaymentMethodType = "bancontact"
+	PaymentMethodTypeGiropay               PaymentMethodType = "giropay"
+	PaymentMethodTypeDotpay                PaymentMethodType = "dotpay"
 )
